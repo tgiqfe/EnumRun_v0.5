@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Threading;
 using System.Diagnostics;
+using System.Net.NetworkInformation;
 
 namespace EnumRun
 {
@@ -19,13 +20,14 @@ namespace EnumRun
         public string LogMessage { get; set; }
 
         //  実行オプション用パラメータ
-        private bool dontRun = false;
-        private bool waitForExit = false;
-        private bool runAdmin = false;
-        private int beforeWait = 0;
-        private int afterWait = 0;
-        private bool runDomain = true;
-        private bool runLocal = true;
+        private bool DontRun { get; set; }
+        private bool WaitForExit { get; set; }
+        private bool RunAdmin { get; set; }
+        private int BeforeWait { get; set; } = 0;
+        private int AfterWait { get; set; } = 0;
+        private bool RunDomain { get; set; } = true;
+        private bool RunLocal { get; set; } = true;
+        private bool CheckNetwork { get; set; }
 
         //  コンストラクタ
         public ScriptOption() { }
@@ -74,7 +76,7 @@ namespace EnumRun
             //  実行対象外かどうかを確認
             if (tempOpt.Contains("n"))
             {
-                this.dontRun = true;
+                this.DontRun = true;
                 logOptList.Add("n:実行対象外");
                 this.LogMessage += " <" + string.Join(",", logOptList) + ">";
                 return;
@@ -83,14 +85,14 @@ namespace EnumRun
             //  終了待ち確認
             if (tempOpt.Contains("w"))
             {
-                this.waitForExit = true;
+                this.WaitForExit = true;
                 logOptList.Add("w:終了待ち");
             }
 
             //  管理者として実行
             if (tempOpt.Contains("a"))
             {
-                this.runAdmin = true;
+                this.RunAdmin = true;
                 logOptList.Add("a:管理者実行");
             }
 
@@ -98,30 +100,37 @@ namespace EnumRun
             Match match;
             if ((match = Regex.Match(tempOpt, @"\d{1,3}r")).Success)
             {
-                this.beforeWait = Convert.ToInt32(match.Value.TrimEnd('r'));
-                logOptList.Add($"{this.beforeWait}r:実行前待機{this.beforeWait}秒");
+                this.BeforeWait = Convert.ToInt32(match.Value.TrimEnd('r'));
+                logOptList.Add($"{this.BeforeWait}r:実行前待機{this.BeforeWait}秒");
             }
 
             //  実行後待機時間
             if ((match = Regex.Match(tempOpt, @"r\d{1,3}")).Success)
             {
-                this.afterWait = Convert.ToInt32(match.Value.TrimStart('r'));
-                logOptList.Add($"r{this.afterWait}:実行後待機{this.afterWait}秒");
-                this.waitForExit = true;
+                this.AfterWait = Convert.ToInt32(match.Value.TrimStart('r'));
+                logOptList.Add($"r{this.AfterWait}:実行後待機{this.AfterWait}秒");
+                this.WaitForExit = true;
             }
 
             //  ドメインユーザーのみ実行
             if (!tempOpt.Contains("l") && tempOpt.Contains("d"))
             {
-                this.runLocal = false;
+                this.RunLocal = false;
                 logOptList.Add("d:ドメインユーザーのみ実行");
             }
 
             //  ローカルユーザーのみ実行
             if (tempOpt.Contains("l") && !tempOpt.Contains("d"))
             {
-                this.runDomain = false;
+                this.RunDomain = false;
                 logOptList.Add("l:ローカルユーザーのみ実行");
+            }
+
+            //  ネットワーク接続可否確認
+            if (tempOpt.Contains("p"))
+            {
+                this.CheckNetwork = true;
+                logOptList.Add("p:ネットワーク接続可否確認");
             }
 
             this.LogMessage += " <" + string.Join(",", logOptList) + ">";
@@ -130,19 +139,42 @@ namespace EnumRun
         public void Run()
         {
             //  実行対象外の場合は終了 ※[n]
-            if (this.dontRun) { return; }
+            if (this.DontRun) { return; }
 
             //  ローカル/ドメインユーザー実行可否確認 ※[l] or [[d]
-            if ((!this.runDomain && (!Environment.MachineName.Equals(Environment.UserDomainName, StringComparison.OrdinalIgnoreCase))) ||
-                (!this.runLocal && (Environment.MachineName.Equals(Environment.UserDomainName, StringComparison.OrdinalIgnoreCase))))
+            if ((!this.RunDomain && (!Environment.MachineName.Equals(Environment.UserDomainName, StringComparison.OrdinalIgnoreCase))) ||
+                (!this.RunLocal && (Environment.MachineName.Equals(Environment.UserDomainName, StringComparison.OrdinalIgnoreCase))))
             {
                 return;
             }
 
-            //  実行前待機 ※[数字r]
-            if (this.beforeWait > 0)
+            //  ネットワーク接続可否確認
+            Func<bool> checkGW = () =>
             {
-                Thread.Sleep(this.beforeWait * 1000);
+                Ping ping = new Ping();
+                foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+                {
+                    foreach (GatewayIPAddressInformation gw in nic.GetIPProperties().GatewayAddresses)
+                    {
+                        for (int i = 0; i < 4; i++)
+                        {
+                            PingReply reply = ping.Send(gw.Address);
+                            if (reply.Status == IPStatus.Success)
+                            {
+                                return true;
+                            }
+                            Thread.Sleep(100);
+                        }
+                    }
+                }
+                return false;
+            };
+            if (!checkGW()) { return; }
+
+            //  実行前待機 ※[数字r]
+            if (this.BeforeWait > 0)
+            {
+                Thread.Sleep(this.BeforeWait * 1000);
             }
 
             //  新プロセスでスクリプトを実行
@@ -152,23 +184,24 @@ namespace EnumRun
                 proc.StartInfo.Arguments = this.arguments;
                 proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 proc.StartInfo.WorkingDirectory = this.workingDir;
-                if (this.runAdmin)
+                if (this.RunAdmin)
                 {
                     proc.StartInfo.Verb = "RunAs";
                 }
                 proc.Start();
-                if (this.waitForExit)
+                if (this.WaitForExit)
                 {
                     proc.WaitForExit();
                 }
             }
 
             //  実行後待機 ※[r数字]
-            if (this.afterWait > 0)
+            if (this.AfterWait > 0)
             {
-                Thread.Sleep(this.afterWait * 1000);
+                Thread.Sleep(this.AfterWait * 1000);
             }
         }
     }
 }
 
+//  ネットワーク導通可否確認オプションの「p」を追加予定

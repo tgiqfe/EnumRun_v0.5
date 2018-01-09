@@ -1,36 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-using System.Threading;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 /*
  * ログ出力用クラス
- *		LastUpdate 2017/02/03
- *		Version 0.01.006
+ *		LastUpdate 2017/10/14
+ *		Version 0.01.017
  */
 namespace EnumRun
 {
     class LogWrite
     {
-        //	フィールドパラメータ
+        //	クラスパラメータ
         private ReaderWriterLock rwLock = null;
+        private bool writeOK = false;
         private string compName = Environment.MachineName;
         private string userName = Environment.UserName;
-        private Encoding _Encode = Encoding.GetEncoding("Shift_JIS");
-        private bool _StandardOut = true;
         private string _LogPath;
         private string _LogDir;
-        private string _LogBaseName;
-        public Encoding Encode { set { this._Encode = value; } get { return this._Encode; } }
-        public bool StandardOut { set { this._StandardOut = value; } get { return this._StandardOut; } }
+        public Encoding Encode { get; set; }
+        public bool StandardOut { get; set; }
         public string LogPath { get { return this._LogPath; } }
         public string LogDir { get { return this._LogDir; } }
-        public string LogBaseName { get { return this._LogBaseName; } }
-        private bool writeOK = false;
+
+        //  Progressログ用パラメータ
+        public char ProgressChar { get; set; }
+        public char PaddingChar { get; set; }
+        public char BorderStartChar { get; set; }
+        public char BorderEndChar { get; set; }
+        public int MaxLength { get; set; }
+        private int cursor = 0;
 
         //	ログ記述タイプ
         public const int LOG_STANDARD = 0;          //	[yyyy/MM/dd HH:mm:ss] message return
@@ -45,24 +46,42 @@ namespace EnumRun
 
         //	コンストラクタ
         public LogWrite() { }
-        public LogWrite(string logPath) :
-            this(Path.GetDirectoryName(Path.GetFullPath(logPath)), Path.GetFileName(logPath))
-        { }
-        public LogWrite(string logDir, string logBaseName)
+        public LogWrite(string logPath)
         {
-            this._LogPath = Path.GetFullPath(logDir + Path.DirectorySeparatorChar + logBaseName);
-            this._LogDir = Path.GetFullPath(logDir);
-            this._LogBaseName = logBaseName;
+            SetLogFile(logPath);
+        }
+        public LogWrite(string logDir, string logBaseName) : this(logDir + Path.DirectorySeparatorChar + logBaseName) { }
+
+        //  ログファイルをセット
+        public void SetLogFile(string logPath)
+        {
+            //  通常ログ記述用設定
+            this._LogPath = Path.GetFullPath(logPath);
+            this._LogDir = Path.GetDirectoryName(this._LogPath);
             try
             {
                 if (!Directory.Exists(this._LogDir))
                 {
                     Directory.CreateDirectory(this._LogDir);
                 }
+
+                //  書き込み可否確認
+                File.Create(this._LogDir + Path.DirectorySeparatorChar + "LogWritableCheck.log").Close();
+                File.Delete(this._LogDir + Path.DirectorySeparatorChar + "LogWritableCheck.log");
                 writeOK = true;
             }
             catch { }
+
+            this.Encode = Encoding.GetEncoding("Shift_JIS");
+            this.StandardOut = true;
             rwLock = new ReaderWriterLock();
+
+            //  Progressログ記述用設定
+            this.ProgressChar = '#';
+            this.PaddingChar = ' ';
+            this.BorderStartChar = '[';
+            this.BorderEndChar = ']';
+            this.MaxLength = 100;
         }
 
         //	ログ記述
@@ -72,6 +91,7 @@ namespace EnumRun
         }
         public void WriteLine(string message, int logType)
         {
+            if (!writeOK) { return; }
             string messageStr = "";
             switch (logType)
             {
@@ -100,14 +120,11 @@ namespace EnumRun
             try
             {
                 rwLock.AcquireWriterLock(10000);
-                if (writeOK)
+                using (StreamWriter sw = new StreamWriter(this._LogPath, true, this.Encode))
                 {
-                    using (StreamWriter sw = new StreamWriter(this._LogPath, true, this._Encode))
-                    {
-                        sw.Write(messageStr);
-                    }
+                    sw.Write(messageStr);
                 }
-                if (this._StandardOut)
+                if (this.StandardOut)
                 {
                     Console.WriteLine(" # " + message);
                 }
@@ -204,14 +221,65 @@ namespace EnumRun
             }
             return resultStr;
         }
+
+        //  ファクトリ
+        public static LogWrite Create(string namePattern)
+        {
+            return new LogWrite(CreateLogFile(namePattern));
+        }
+
+        //  Progressログ
+        public void ProgressLog(double value)
+        {
+            //  ログ出力部分
+            Action<string> WriteProgress = (messageStr) =>
+            {
+                if (!writeOK) { return; }
+                try
+                {
+                    rwLock.AcquireWriterLock(10000);
+                    using (StreamWriter sw = new StreamWriter(this._LogPath, true, this.Encode))
+                    {
+                        sw.Write(messageStr);
+                    }
+                    if (this.StandardOut)
+                    {
+                        Console.Write(messageStr);
+                    }
+                }
+                catch { }
+                finally
+                {
+                    rwLock.ReleaseWriterLock();
+                }
+            };
+
+            //  Progressログ開始
+            int percent = value * 100 >= MaxLength ? MaxLength : (int)Math.Floor(value * 100);
+            if (percent > 0)
+            {
+                if (cursor <= 0 || cursor >= MaxLength)
+                {
+                    WriteProgress(BorderStartChar.ToString());
+                    cursor = 0;
+                }
+                if (percent == cursor) { return; }
+                if (percent < cursor)
+                {
+                    WriteProgress(
+                        new string(PaddingChar, MaxLength - cursor) +
+                        BorderEndChar.ToString() + "\r\n" +
+                        BorderStartChar.ToString());
+                    cursor = 0;
+                }
+                WriteProgress(new string(ProgressChar, percent - cursor));
+                cursor = percent;
+            }
+            if (cursor >= MaxLength)
+            {
+                WriteProgress(BorderEndChar.ToString() + "\r\n");
+                cursor = 0;
+            }
+        }
     }
 }
-
-
-
-/*
-
-マルチプロセス用に、ログキャッシュ
-フォームアプリケーション用に、標準出力以外にもログ一時表示を
-
-*/

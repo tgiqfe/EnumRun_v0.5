@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Xml.Serialization;
+using System.Xml;
 
 namespace EnumRun
 {
@@ -74,7 +75,9 @@ namespace EnumRun
             {
                 using (StreamWriter sw = new StreamWriter(this.FileName, false, Encoding.UTF8))
                 {
-                    new XmlSerializer(typeof(DataLibrary)).Serialize(sw, this);
+                    new XmlSerializer(typeof(DataLibrary)).Serialize(sw, this,
+                        new XmlSerializerNamespaces(
+                            new XmlQualifiedName[1] { XmlQualifiedName.Empty }));
                 }
             }
             catch { }
