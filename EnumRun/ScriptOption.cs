@@ -169,7 +169,10 @@ namespace EnumRun
                 }
                 return false;
             };
-            if (!checkGW()) { return; }
+            if (CheckNetwork)
+            {
+                if (!checkGW()) { return; }
+            }
 
             //  実行前待機 ※[数字r]
             if (this.BeforeWait > 0)
@@ -203,5 +206,3 @@ namespace EnumRun
         }
     }
 }
-
-//  ネットワーク導通可否確認オプションの「p」を追加予定
