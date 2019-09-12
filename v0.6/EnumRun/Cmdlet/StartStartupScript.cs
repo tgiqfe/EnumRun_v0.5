@@ -42,9 +42,8 @@ namespace EnumRun.Cmdlet
                 //  スクリプトファイルの実行
                 foreach(Script script in scriptList)
                 {
-
+                    script.Process();
                 }
-
             }
         }
     }

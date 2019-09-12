@@ -21,6 +21,7 @@ namespace EnumRun
                 Name = "EnumRun",
                 FilesPath = Path.Combine(Item.WORK_DIR, "Files"),
                 LogsPath = Path.Combine(Item.WORK_DIR, "Logs"),
+                OutputPath = Path.Combine(Item.WORK_DIR, "Output"),
                 Ranges = DefaultRangeSettings.Create(),
                 Languages = DefaultLanguageSetting.Create()
             };

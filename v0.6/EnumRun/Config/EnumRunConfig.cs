@@ -11,6 +11,7 @@ namespace EnumRun
         public string Name { get; set; }
         public string FilesPath { get; set; }
         public string LogsPath { get; set; }
+        public string OutputPath { get; set; }
         public bool DebugMode { get; set; }
         public SerializableDictionary<string, Range> Ranges { get; set; }
         public SerializableDictionary<string, Language> Languages { get; set; }

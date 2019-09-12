@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Diagnostics;
 
 namespace EnumRun
 {
@@ -22,8 +24,9 @@ namespace EnumRun
         TrustedOnly = 128,          //  [t] 管理者に昇格している場合のみ実行
         WorkgroupPCOnly = 256,      //  [k] ワークグループPCの場合のみ実行
         DomainPCOnly = 512,         //  [m] ドメイン参加PCの場合のみ実行
-        BeforeWait = 1024,          //  [\dr] 実行前待機
-        AfterWait = 2048,           //  [r\d] 実行後待機
+        Output = 1024,              //  [o] 実行中の標準/エラーをファイルに出力
+        BeforeWait = 2048,          //  [\dr] 実行前待機
+        AfterWait = 4096,           //  [r\d] 実行後待機
     }
 
     public class Script
@@ -33,6 +36,7 @@ namespace EnumRun
         public bool Enabled { get; set; }
         public string Name { get; set; }
         public string File { get; set; }
+        public string Args { get; set; }
         public string Lang
         {
             get
@@ -116,6 +120,7 @@ namespace EnumRun
                 if (matchString.Contains("t")) { Option |= EnumRunOption.TrustedOnly; }
                 if (matchString.Contains("k")) { Option |= EnumRunOption.WorkgroupPCOnly; }
                 if (matchString.Contains("m")) { Option |= EnumRunOption.DomainPCOnly; }
+                if (matchString.Contains("o")) { Option |= EnumRunOption.Output; }
 
                 //  実行前/実行後待機時間
                 Match match;
@@ -133,10 +138,68 @@ namespace EnumRun
             }
         }
 
-        public void Run()
+        /// <summary>
+        /// プロセス実行用タスク
+        /// </summary>
+        public void Process()
         {
+            //  実行前待機
+            if (BeforeTime > 0) { Thread.Sleep(BeforeTime * 1000); }
 
+            //  プロセス開始
+            Task task = (Option & EnumRunOption.Output) == EnumRunOption.Output ?
+                ProcessThread("標準出力先ファイル名") :
+                ProcessThread();
+            if ((Option & EnumRunOption.WaitForExit) == EnumRunOption.WaitForExit)
+            {
+                task.Wait();
+            }
+
+            //  実行後待機
+            if (AfterTime > 0) { Thread.Sleep(AfterTime * 1000); }
         }
+
+        private async Task ProcessThread()
+        {
+            await Task.Run(() =>
+            {
+                using (Process proc = _Lang.GetProcess(File, Args))
+                {
+                    proc.StartInfo.Verb =
+                        (Option & EnumRunOption.RunAsAdmin) == EnumRunOption.RunAsAdmin ? "RunAs" : "";
+                    proc.StartInfo.CreateNoWindow = true;
+                    proc.StartInfo.UseShellExecute = false;
+                    proc.Start();
+                    proc.WaitForExit();
+                    //proc.ExitCode;    ←戻り値の扱いを検討中
+                }
+            });
+        }
+        private async Task ProcessThread(string outputFile)
+        {
+            await Task.Run(() =>
+            {
+                using (Process proc = _Lang.GetProcess(File, Args))
+                using (StreamWriter sw = new StreamWriter(outputFile, true, Encoding.GetEncoding("Shift_JIS")))
+                {
+                    proc.StartInfo.Verb =
+                        (Option & EnumRunOption.RunAsAdmin) == EnumRunOption.RunAsAdmin ? "RunAs" : "";
+                    proc.StartInfo.CreateNoWindow = true;
+                    proc.StartInfo.UseShellExecute = false;
+                    proc.StartInfo.RedirectStandardOutput = true;
+                    proc.StartInfo.RedirectStandardError = true;
+                    proc.StartInfo.RedirectStandardInput = false;
+                    proc.OutputDataReceived += (sender, e) => { sw.WriteLine(e.Data); };
+                    proc.ErrorDataReceived += (sender, e) => { sw.WriteLine(e.Data); };
+                    proc.Start();
+                    proc.BeginOutputReadLine();
+                    proc.BeginErrorReadLine();
+                    proc.WaitForExit();
+                    //proc.ExitCode;    ←戻り値の扱いを検討中
+                }
+            });
+        }
+
 
     }
 }
