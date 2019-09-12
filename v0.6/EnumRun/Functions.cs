@@ -19,8 +19,8 @@ namespace EnumRun
             return new EnumRunConfig()
             {
                 Name = "EnumRun",
-                FilesPath = "Files",
-                LogsPath = "Logs",
+                FilesPath = Path.Combine(Item.WORK_DIR, "Files"),
+                LogsPath = Path.Combine(Item.WORK_DIR, "Logs"),
                 Ranges = DefaultRangeSettings.Create(),
                 Languages = DefaultLanguageSetting.Create()
             };

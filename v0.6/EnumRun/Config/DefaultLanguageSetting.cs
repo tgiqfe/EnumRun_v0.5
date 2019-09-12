@@ -48,6 +48,7 @@ namespace EnumRun
                 ArgsMidWithArgs = "\" ",
                 ArgsSuffix = ""
             };
+            /*
             langs["Node"] = new Language()
             {
                 Name = "Node",
@@ -58,6 +59,7 @@ namespace EnumRun
                 ArgsMidWithArgs = "\" ",
                 ArgsSuffix = ""
             };
+            */
             langs["Go"] = new Language()
             {
                 Name = "Go",

@@ -8,9 +8,11 @@ using System.IO;
 
 namespace EnumRun.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Add, "EnumRunLanguage")]
+    [Cmdlet(VerbsLifecycle.Start, "StartupScript")]
     public class StartStartupScript : PSCmdlet
     {
+        const string ProcessName = "StartupScript";
+
         //  パラメータ無しでコマンドレットのみを実行
 
         protected override void BeginProcessing()
@@ -20,16 +22,29 @@ namespace EnumRun.Cmdlet
 
         protected override void ProcessRecord()
         {
+            int startNum = Item.Config.Ranges[ProcessName].StartNumber;
+            int endNum = Item.Config.Ranges[ProcessName].EndNumber;
+
             if (Directory.Exists(Item.Config.FilesPath))
             {
+                //  スクリプトファイルの列挙
+                List<Script> scriptList = new List<Script>();
                 foreach (string scriptFile in Directory.GetFiles(Item.Config.FilesPath))
                 {
-                    Script script = new Script()
+                    Script script = new Script(scriptFile, startNum, endNum);
+                    if (script.Enabled)
                     {
-                        Name = Path.GetFileName(scriptFile),
-                        File = scriptFile
-                    };
+                        scriptList.Add(script);
+                        //DataSerializer.Serialize<Script>(script, Console.Out, ".json");
+                    }
                 }
+
+                //  スクリプトファイルの実行
+                foreach(Script script in scriptList)
+                {
+
+                }
+
             }
         }
     }
