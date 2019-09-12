@@ -60,14 +60,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Language.cs" />
+    <Compile Include="Cmdlet\SetEnumRunConfig.cs" />
+    <Compile Include="Cmdlet\AddEnumRunLanguage.cs" />
+    <Compile Include="Config\DefaultLanguageSetting.cs" />
+    <Compile Include="Config\EnumRunConfig.cs" />
+    <Compile Include="Config\DefaultRangeSettings.cs" />
+    <Compile Include="Item.cs" />
+    <Compile Include="Config\Language.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Config\Range.cs" />
+    <Compile Include="Script.cs" />
+    <Compile Include="Config\Serialize\DataSerializer.cs" />
+    <Compile Include="Config\Serialize\SerializableDictionary.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Cmdlet\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
