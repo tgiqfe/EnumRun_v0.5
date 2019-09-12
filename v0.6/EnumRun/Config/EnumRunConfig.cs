@@ -9,10 +9,11 @@ namespace EnumRun
     public class EnumRunConfig
     {
         public string Name { get; set; }
-        public string FileDirectoryPath { get; set; }
-        public string LogDirectoryPath { get; set; }
-        public List<Range> RangeList { get; set; }
-        public SerializableDictionary<string, Language> LanguageList { get; set; }
+        public string FilesPath { get; set; }
+        public string LogsPath { get; set; }
+        public bool DebugMode { get; set; }
+        public SerializableDictionary<string, Range> Ranges { get; set; }
+        public SerializableDictionary<string, Language> Languages { get; set; }
 
         public EnumRunConfig() { }
     }

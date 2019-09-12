@@ -23,22 +23,7 @@ namespace EnumRun.Cmdlet
 
         protected override void ProcessRecord()
         {
-            EnumRunConfig erc = new EnumRunConfig();
-            erc.Name = "EnumRunConfig";
-            erc.FileDirectoryPath = "Files";
-            erc.LogDirectoryPath = "Logs";
-            erc.LanguageList = DefaultLanguageSetting.Create();
-            erc.RangeList = DefaultRangeSettings.Create();
-
-
-            string outputFile = Path.Combine(
-                Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"),
-                Item.APPLICATION_NAME, "Conf.yml");
-            if (!Directory.Exists(Path.GetDirectoryName(outputFile)))
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
-            }
-            DataSerializer.Serialize<EnumRunConfig>(erc, outputFile);
+ 
 
 
 

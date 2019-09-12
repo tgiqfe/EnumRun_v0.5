@@ -8,37 +8,39 @@ namespace EnumRun
 {
     class DefaultRangeSettings
     {
-        public static List<Range> Create()
+        public static SerializableDictionary<string, Range> Create()
         {
-            List<Range> ranges = new List<Range>();
-            ranges.Add(new Range()
+            SerializableDictionary<string, Range> ranges = new SerializableDictionary<string, Range>();
+
+            string startupScript = "StartupScript";
+            string logonScript = "LogonScript";
+            string logoffScript = "LogoffScript";
+            string shutdownScript = "ShutdownScript";
+
+            ranges[startupScript] = new Range()
             {
-                Name = "StartupScript",
+                Name = startupScript,
                 StartNumber = 0,
-                EndNumber = 9,
-                ProcessName = "StartupScript"
-            });
-            ranges.Add(new Range()
+                EndNumber = 9
+            };
+            ranges[logonScript] = new Range()
             {
-                Name = "LogonScript",
+                Name = logonScript,
                 StartNumber = 11,
-                EndNumber = 29,
-                ProcessName = "LogonScript"
-            });
-            ranges.Add(new Range()
+                EndNumber = 29
+            };
+            ranges[logoffScript] =new Range()
             {
-                Name = "LogoffScript",
+                Name = logoffScript,
                 StartNumber = 81,
-                EndNumber = 89,
-                ProcessName = "LogoffScript"
-            });
-            ranges.Add(new Range()
+                EndNumber = 89
+            };
+            ranges[shutdownScript] =new Range()
             {
-                Name = "ShutdownScript",
+                Name = shutdownScript,
                 StartNumber = 91,
                 EndNumber = 99,
-                ProcessName = "ShutdownScript"
-            });
+            };
             return ranges;
         }
     }

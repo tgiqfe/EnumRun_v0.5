@@ -15,6 +15,7 @@ namespace EnumRun
             Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"), APPLICATION_NAME);
         public readonly static string CONF_DIR = Path.Combine(WORK_DIR, "Conf");
 
-
+        //  設定ファイルから読み込んだパラメータ
+        public static EnumRunConfig Config = null;
     }
 }

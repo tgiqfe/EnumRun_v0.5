@@ -12,7 +12,18 @@ namespace EnumRun.Cmdlet
     {
         protected override void ProcessRecord()
         {
-            
+
+            EnumRunConfig erc = new EnumRunConfig();
+            erc.Name = "EnumRun";
+            erc.FilesPath = "Files";
+            erc.LogsPath = "Logs";
+            erc.Languages = DefaultLanguageSetting.Create();
+            erc.Ranges = DefaultRangeSettings.Create();
+
+
+            WriteObject(erc);
+
+
         }
     }
 }
