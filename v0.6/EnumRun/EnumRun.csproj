@@ -65,10 +65,15 @@
     <Compile Include="Cmdlet\SetEnumRunConfig.cs" />
     <Compile Include="Cmdlet\AddEnumRunLanguage.cs" />
     <Compile Include="Cmdlet\SetEnumRunLanguage.cs" />
-    <Compile Include="Cmdlet\StartStartupScript.cs" />
+    <Compile Include="Cmdlet\ps\StartStartupScript.cs" />
+    <Compile Include="Cmdlet\ps\StartLogonScript.cs" />
+    <Compile Include="Cmdlet\ps\StartLogoffScript.cs" />
+    <Compile Include="Cmdlet\ps\StartShutdownScript.cs" />
+    <Compile Include="Cmdlet\StartEnumRun.cs" />
     <Compile Include="Config\DefaultLanguageSetting.cs" />
     <Compile Include="Config\EnumRunConfig.cs" />
     <Compile Include="Config\DefaultRangeSettings.cs" />
+    <Compile Include="EnumRunControl.cs" />
     <Compile Include="Functions.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Language.cs" />

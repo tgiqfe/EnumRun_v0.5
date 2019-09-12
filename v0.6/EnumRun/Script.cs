@@ -139,21 +139,31 @@ namespace EnumRun
         }
 
         /// <summary>
+        /// 対象のオプションが含まれているかどうか
+        /// </summary>
+        /// <param name="targetOption"></param>
+        /// <returns></returns>
+        private bool CheckOption(EnumRunOption targetOption)
+        {
+            return (Option & targetOption) == targetOption;
+        }
+
+        /// <summary>
         /// プロセス実行用タスク
         /// </summary>
         public void Process()
         {
+            //  実行対象外
+            if (CheckOption(EnumRunOption.NoRun)) { return; }
+
             //  実行前待機
             if (BeforeTime > 0) { Thread.Sleep(BeforeTime * 1000); }
 
             //  プロセス開始
-            Task task = (Option & EnumRunOption.Output) == EnumRunOption.Output ?
+            Task task = CheckOption(EnumRunOption.Output) ?
                 ProcessThread("標準出力先ファイル名") :
                 ProcessThread();
-            if ((Option & EnumRunOption.WaitForExit) == EnumRunOption.WaitForExit)
-            {
-                task.Wait();
-            }
+            if (CheckOption(EnumRunOption.WaitForExit)) { task.Wait(); }
 
             //  実行後待機
             if (AfterTime > 0) { Thread.Sleep(AfterTime * 1000); }
@@ -165,8 +175,7 @@ namespace EnumRun
             {
                 using (Process proc = _Lang.GetProcess(File, Args))
                 {
-                    proc.StartInfo.Verb =
-                        (Option & EnumRunOption.RunAsAdmin) == EnumRunOption.RunAsAdmin ? "RunAs" : "";
+                    proc.StartInfo.Verb = CheckOption(EnumRunOption.RunAsAdmin) ? "RunAs" : "";
                     proc.StartInfo.CreateNoWindow = true;
                     proc.StartInfo.UseShellExecute = false;
                     proc.Start();
@@ -182,8 +191,7 @@ namespace EnumRun
                 using (Process proc = _Lang.GetProcess(File, Args))
                 using (StreamWriter sw = new StreamWriter(outputFile, true, Encoding.GetEncoding("Shift_JIS")))
                 {
-                    proc.StartInfo.Verb =
-                        (Option & EnumRunOption.RunAsAdmin) == EnumRunOption.RunAsAdmin ? "RunAs" : "";
+                    proc.StartInfo.Verb = CheckOption(EnumRunOption.RunAsAdmin) ? "RunAs" : "";
                     proc.StartInfo.CreateNoWindow = true;
                     proc.StartInfo.UseShellExecute = false;
                     proc.StartInfo.RedirectStandardOutput = true;
