@@ -7,8 +7,8 @@ using System.Management.Automation;
 
 namespace EnumRun.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Add, "EnumRunLanguage")]
-    public class AddEnumRunLanguage : PSCmdlet
+    [Cmdlet(VerbsCommon.New, "EnumRunLanguage")]
+    public class NewEnumRunLanguage : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0)]
         public string Name { get; set; }
@@ -31,6 +31,8 @@ namespace EnumRun.Cmdlet
 
         protected override void ProcessRecord()
         {
+            
+
             Language lang = new Language()
             {
                 Name = this.Name,

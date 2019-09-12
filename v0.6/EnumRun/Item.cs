@@ -11,6 +11,11 @@ namespace EnumRun
         //  静的パラメータ
         public const string ApplicationName = "EnumRun";
 
+        public const string WINDOWS = "Windows";
+        public const string MAC = "Mac";
+        public const string LINUX = "Linux";
+
+
         //  プロセス引数から取得するパラメータ
         public static string LanguageFile = "Language.xml";
 
