@@ -15,14 +15,12 @@ namespace EnumRun
             langs["exe"] = new Language()
             {
                 Name = "exe",
-                OS = "Windows",
                 Extensions = new string[] { ".exe" },
                 Command = null,
             };
             langs["cmd"] = new Language()
             {
                 Name = "cmd",
-                OS = "Windows",
                 Extensions = new string[] { ".bat", ".cmd" },
                 Command = "cmd",
                 ArgsPrefix = "/c \"",
@@ -33,7 +31,6 @@ namespace EnumRun
             langs["PowerShell"] = new Language()
             {
                 Name = "PowerShell",
-                OS = "Windows",
                 Extensions = new string[] { ".ps1" },
                 Command = @"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe",
                 ArgsPrefix = "-ExecutionPolicy Unrestricted -File \"",
@@ -44,7 +41,6 @@ namespace EnumRun
             langs["WScript"] = new Language()
             {
                 Name = "WScript",
-                OS = "Windows",
                 Extensions = new string[] { ".vbs", ".vbe", ".js", ".jse", ".wsf", ".wsh" },
                 Command = @"C:\Windows\System32\wscript.exe",
                 ArgsPrefix = "//nologo \"",
@@ -55,7 +51,6 @@ namespace EnumRun
             langs["Node"] = new Language()
             {
                 Name = "Node",
-                OS = "Windows",
                 Extensions = new string[] { ".js" },
                 Command = @"C:\Program Files\nodejs\node.exe",
                 ArgsPrefix = "\"",
@@ -66,7 +61,6 @@ namespace EnumRun
             langs["Go"] = new Language()
             {
                 Name = "Go",
-                OS = "Windows",
                 Extensions = new string[] { ".go" },
                 Command = @"C:\Program Files\Go\bin\go.exe",
                 ArgsPrefix = "\"",

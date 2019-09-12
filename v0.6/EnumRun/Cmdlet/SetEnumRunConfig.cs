@@ -33,7 +33,7 @@ namespace EnumRun.Cmdlet
 
             string outputFile = Path.Combine(
                 Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"),
-                Item.ApplicationName, "Conf.yml");
+                Item.APPLICATION_NAME, "Conf.yml");
             if (!Directory.Exists(Path.GetDirectoryName(outputFile)))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(outputFile));

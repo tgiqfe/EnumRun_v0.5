@@ -60,13 +60,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cmdlet\NewEnumRunLanguage.cs" />
+    <Compile Include="Cmdlet\DebugEnumRun.cs" />
+    <Compile Include="Cmdlet\RemoveEnumRunLanguage.cs" />
     <Compile Include="Cmdlet\SetEnumRunConfig.cs" />
-    <Compile Include="Cmdlet\EnumRunLanguage\AddEnumRunLanguage.cs" />
-    <Compile Include="Cmdlet\EnumRunLanguage\SetEnumRunLanguage.cs" />
+    <Compile Include="Cmdlet\AddEnumRunLanguage.cs" />
+    <Compile Include="Cmdlet\SetEnumRunLanguage.cs" />
     <Compile Include="Config\DefaultLanguageSetting.cs" />
     <Compile Include="Config\EnumRunConfig.cs" />
     <Compile Include="Config\DefaultRangeSettings.cs" />
+    <Compile Include="EnumRunControl.cs" />
     <Compile Include="Functions.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Config\Language.cs" />

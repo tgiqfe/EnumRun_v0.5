@@ -12,8 +12,6 @@ namespace EnumRun.Cmdlet
     {
         [Parameter(Mandatory = true, Position = 0)]
         public string Name { get; set; }
-        [Parameter, ValidateSet(Item.WINDOWS, Item.MAC, Item.LINUX)]
-        public string OS { get; set; } = Item.WINDOWS;
         [Parameter]
         public string[] Extensions { get; set; }
         [Parameter]
@@ -34,7 +32,6 @@ namespace EnumRun.Cmdlet
             Language lang = new Language()
             {
                 Name = this.Name,
-                OS = this.OS,
                 Extensions = this.Extensions,
                 Command = this.Command,
                 Command_x86 = this.Command_x86,
