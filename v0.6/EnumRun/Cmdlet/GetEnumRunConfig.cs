@@ -4,29 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Management.Automation;
-using System.IO;
-using System.Diagnostics;
 
 namespace EnumRun.Cmdlet
 {
     [Cmdlet(VerbsCommon.Get, "EnumRunConfig")]
-    public class SetEnumRunConfig : PSCmdlet
+    public class GetEnumRunConfig : PSCmdlet
     {
-        [Parameter]
-        public string Name { get; set; }
-        [Parameter]
-        public string FileDirectoryPath { get; set; }
-        [Parameter]
-        public string LogDirectoryPath { get; set; }
-        
-
+        protected override void BeginProcessing()
+        {
+            Item.Config = EnumRunConfig.Load();
+        }
 
         protected override void ProcessRecord()
         {
- 
-
-
-
+            WriteObject(Item.Config);
         }
     }
 }

@@ -36,7 +36,7 @@ namespace EnumRun.Cmdlet
 
         protected override void ProcessRecord()
         {
-            if(Language == null)
+            if(Language == null && !string.IsNullOrEmpty(Name))
             {
                 Language lang = new Language()
                 {
@@ -51,7 +51,7 @@ namespace EnumRun.Cmdlet
                 };
                 Item.Config.Languages[Name] = lang;
             }
-            else
+            else if(Language != null)
             {
                 Item.Config.Languages[Language.Name] = Language;
             }
