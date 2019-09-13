@@ -57,6 +57,7 @@ namespace EnumRun
                 Path.Combine(Item.CONF_DIR, "Config.xml"),
                 Path.Combine(Item.CONF_DIR, "Config.yml")
             }.FirstOrDefault(x => File.Exists(x));
+
             if (fileName == null)
             {
                 //  デフォルトでは C:\ProgramData\EnumRun\Conf\Config.json

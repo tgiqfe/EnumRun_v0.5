@@ -7,8 +7,8 @@ using System.Management.Automation;
 
 namespace EnumRun.Cmdlet
 {
-    [Cmdlet(VerbsLifecycle.Start, "LogoffScript")]
-    public class StartLogoffScript : PSCmdlet
+    [Cmdlet(VerbsCommon.Enter, "LogoffScript")]
+    public class EnterLogoffScript : PSCmdlet
     {
         protected override void BeginProcessing()
         {

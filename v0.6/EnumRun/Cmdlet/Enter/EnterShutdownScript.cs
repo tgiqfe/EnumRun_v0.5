@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Management.Automation;
-using System.IO;
 
 namespace EnumRun.Cmdlet
 {
-    [Cmdlet(VerbsLifecycle.Start, "StartupScript")]
-    public class StartStartupScript : PSCmdlet
+    [Cmdlet(VerbsCommon.Enter, "ShutdownScript")]
+    public class EnterShutdownScript : PSCmdlet
     {
         protected override void BeginProcessing()
         {
@@ -18,7 +17,7 @@ namespace EnumRun.Cmdlet
 
         protected override void ProcessRecord()
         {
-            Functions.StartEnumRun("StartupScript");
+            Functions.StartEnumRun("ShutdownScript");
         }
     }
 }

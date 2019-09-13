@@ -62,16 +62,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cmdlet\ConvertEnumRunConfig.cs" />
+    <Compile Include="Cmdlet\Range\AddEnumRunRange.cs" />
     <Compile Include="Cmdlet\GetEnumRunConfig.cs" />
     <Compile Include="Cmdlet\Language\RemoveEnumRunLanguage.cs" />
     <Compile Include="Cmdlet\Language\NewEnumRunLanguage.cs" />
     <Compile Include="Cmdlet\Language\AddEnumRunLanguage.cs" />
     <Compile Include="Cmdlet\Language\SetEnumRunLanguage.cs" />
-    <Compile Include="Cmdlet\ps\StartStartupScript.cs" />
-    <Compile Include="Cmdlet\ps\StartLogonScript.cs" />
-    <Compile Include="Cmdlet\ps\StartLogoffScript.cs" />
-    <Compile Include="Cmdlet\ps\StartShutdownScript.cs" />
-    <Compile Include="Cmdlet\ps\StartEnumRun.cs" />
+    <Compile Include="Cmdlet\Enter\EnterStartupScript.cs" />
+    <Compile Include="Cmdlet\Enter\EnterLogonScript.cs" />
+    <Compile Include="Cmdlet\Enter\EnterLogoffScript.cs" />
+    <Compile Include="Cmdlet\Enter\EnterShutdownScript.cs" />
+    <Compile Include="Cmdlet\Enter\EnterEnumRun.cs" />
+    <Compile Include="Cmdlet\SetEnumRunConfig.cs" />
     <Compile Include="Config\Script\DefaultLanguageSetting.cs" />
     <Compile Include="Config\Script\EnumRunConfig.cs" />
     <Compile Include="Config\Script\DefaultRangeSettings.cs" />

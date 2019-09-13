@@ -19,25 +19,25 @@ namespace EnumRun
 
             ranges[startupScript] = new Range()
             {
-                Name = startupScript,
+                ProcessName = startupScript,
                 StartNumber = 0,
                 EndNumber = 9
             };
             ranges[logonScript] = new Range()
             {
-                Name = logonScript,
+                ProcessName = logonScript,
                 StartNumber = 11,
                 EndNumber = 29
             };
             ranges[logoffScript] =new Range()
             {
-                Name = logoffScript,
+                ProcessName = logoffScript,
                 StartNumber = 81,
                 EndNumber = 89
             };
             ranges[shutdownScript] =new Range()
             {
-                Name = shutdownScript,
+                ProcessName = shutdownScript,
                 StartNumber = 91,
                 EndNumber = 99,
             };

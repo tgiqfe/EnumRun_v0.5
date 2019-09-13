@@ -7,12 +7,9 @@ using System.Management.Automation;
 
 namespace EnumRun.Cmdlet
 {
-    [Cmdlet(VerbsLifecycle.Start, "EnumRun")]
-    public class StartEnumRun : PSCmdlet
+    [Cmdlet(VerbsCommon.Enter, "LogonScript")]
+    public class EnterLogonScript : PSCmdlet
     {
-        [Parameter(Mandatory = true, Position = 0)]
-        public string ProcessName { get; set; }
-
         protected override void BeginProcessing()
         {
             Item.Config = EnumRunConfig.Load();
@@ -20,7 +17,7 @@ namespace EnumRun.Cmdlet
 
         protected override void ProcessRecord()
         {
-            Functions.StartEnumRun(ProcessName);
+            Functions.StartEnumRun("LogonScript");
         }
     }
 }

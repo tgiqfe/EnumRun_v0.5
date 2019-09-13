@@ -8,7 +8,7 @@ namespace EnumRun
 {
     public class Range
     {
-        public string Name { get; set; }
+        public string ProcessName { get; set; }
         public int StartNumber { get; set; }
         public int EndNumber { get; set; }
 
@@ -16,7 +16,7 @@ namespace EnumRun
 
         public override string ToString()
         {
-            return string.Format("{0}[{1}-{2}]", this.Name, this.StartNumber, this.EndNumber);
+            return string.Format("{0}[{1}-{2}]", this.ProcessName, this.StartNumber, this.EndNumber);
         }
     }
 }
