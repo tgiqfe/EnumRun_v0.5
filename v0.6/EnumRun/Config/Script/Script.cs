@@ -26,15 +26,24 @@ namespace EnumRun
                 {
                     string extension = Path.GetExtension(File);
                     this._Lang = Item.Config.Languages.FirstOrDefault(x =>
+                        x.Extensions.Any(y =>
+                            y.Equals(extension, StringComparison.OrdinalIgnoreCase)));
+                    /*
+                    this._Lang = Item.Config.Languages.FirstOrDefault(x =>
                         x.Value.Extensions.Any(y =>
                             y.Equals(extension, StringComparison.OrdinalIgnoreCase))).Value;
+                    */
                 }
                 return _Lang == null ? "" : _Lang.ToString();
             }
             set
             {
+                /*
                 this._Lang = Item.Config.Languages.FirstOrDefault(x =>
-                x.Value.Name.Equals(value, StringComparison.OrdinalIgnoreCase)).Value;
+                    x.Value.Name.Equals(value, StringComparison.OrdinalIgnoreCase)).Value;
+                */
+                this._Lang = Item.Config.Languages.FirstOrDefault(x =>
+                    x.Name.Equals(value, StringComparison.OrdinalIgnoreCase));
             }
         }
         public EnumRunOption Option { get; set; }
@@ -138,7 +147,7 @@ namespace EnumRun
             if (CheckOption(EnumRunOption.NoRun)) { return; }
 
             //  ドメイン参加済みPCのみ ro ワークグループPCのみ
-            if(
+            if (
                 (CheckOption(EnumRunOption.DomainPCOnly) && !CheckOption(EnumRunOption.WorkgroupPCOnly) && !Functions.IsDomainMachine()) ||
                 (!CheckOption(EnumRunOption.DomainPCOnly) && CheckOption(EnumRunOption.WorkgroupPCOnly) && Functions.IsDomainMachine()))
             {

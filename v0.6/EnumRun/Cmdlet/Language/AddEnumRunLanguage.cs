@@ -49,11 +49,12 @@ namespace EnumRun.Cmdlet
                     ArgsMidWithArgs = this.ArgsMidWithArgs,
                     ArgsSuffix = this.ArgsSuffix
                 };
-                Item.Config.Languages[Name] = lang;
+                //  重複した場合は?
+                //Item.Config.Languages[Name] = lang;
             }
             else if(Language != null)
             {
-                Item.Config.Languages[Language.Name] = Language;
+                //Item.Config.Languages[Language.Name] = Language;
             }
             Item.Config.Save();
         }

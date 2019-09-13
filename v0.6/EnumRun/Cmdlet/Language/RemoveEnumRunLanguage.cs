@@ -24,11 +24,12 @@ namespace EnumRun.Cmdlet
         {
             if (Language == null && !string.IsNullOrEmpty(Name))
             {
-                Item.Config.Languages.Remove(Name);
+                //  削除の対象は?
+                //Item.Config.Languages.Remove(Name);
             }
             else
             {
-                Item.Config.Languages.Remove(Language.Name);
+                //Item.Config.Languages.Remove(Language.Name);
             }
             Item.Config.Save();
         }

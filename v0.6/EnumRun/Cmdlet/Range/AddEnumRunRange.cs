@@ -34,11 +34,12 @@ namespace EnumRun.Cmdlet
                     StartNumber = this.StartNumber,
                     EndNumber = this.EndNumber
                 };
-                Item.Config.Ranges[ProcessName] = range;
+                //  重複した場合は?
+                Item.Config.Ranges.Add(range);
             }
             else if (Range != null)
             {
-                Item.Config.Ranges[Range.ProcessName] = Range;
+                Item.Config.Ranges.Add(Range);
             }
             Item.Config.Save();
         }

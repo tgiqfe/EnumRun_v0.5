@@ -34,10 +34,13 @@ namespace EnumRun
         /// <param name="processName">プロセス名</param>
         public static void StartEnumRun(string processName)
         {
-            if (Item.Config.Ranges.ContainsKey(processName))
+            Range range = Item.Config.Ranges.FirstOrDefault(x => x.ProcessName.Equals(processName, StringComparison.OrdinalIgnoreCase));
+            if (range != null)
+            //if (Item.Config.Ranges.ContainsKey(processName))
+            //if(Item.Config.Ranges.Any(x => x.ProcessName.Equals(processName, StringComparison.OrdinalIgnoreCase)))
             {
-                int startNum = Item.Config.Ranges[processName].StartNumber;
-                int endNum = Item.Config.Ranges[processName].EndNumber;
+                //int startNum = Item.Config.Ranges[processName].StartNumber;
+                //int endNum = Item.Config.Ranges[processName].EndNumber;
 
                 if (Directory.Exists(Item.Config.FilesPath))
                 {
@@ -45,7 +48,7 @@ namespace EnumRun
                     List<Script> scriptList = new List<Script>();
                     foreach (string scriptFile in Directory.GetFiles(Item.Config.FilesPath))
                     {
-                        Script script = new Script(scriptFile, startNum, endNum);
+                        Script script = new Script(scriptFile, range.StartNumber, range.EndNumber);
                         if (script.Enabled)
                         {
                             scriptList.Add(script);

@@ -19,9 +19,9 @@ namespace EnumRun.Cmdlet
         [Parameter]
         public SwitchParameter DebugMode { get; set; }
         [Parameter]
-        public SerializableDictionary<string, Range> Ranges { get; set; }
+        public List<Range> Ranges { get; set; }
         [Parameter]
-        public SerializableDictionary<string, Language> Languages { get; set; }
+        public List<Language> Languages { get; set; }
         [Parameter]
         public SwitchParameter DefaultSetting { get; set; }
 
