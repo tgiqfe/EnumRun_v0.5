@@ -42,6 +42,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\WindowsPowerShell\3.0\System.Management.Automation.dll</HintPath>
@@ -70,16 +71,17 @@
     <Compile Include="Cmdlet\ps\StartLogoffScript.cs" />
     <Compile Include="Cmdlet\ps\StartShutdownScript.cs" />
     <Compile Include="Cmdlet\StartEnumRun.cs" />
-    <Compile Include="Config\DefaultLanguageSetting.cs" />
-    <Compile Include="Config\EnumRunConfig.cs" />
-    <Compile Include="Config\DefaultRangeSettings.cs" />
-    <Compile Include="EnumRunControl.cs" />
+    <Compile Include="Config\Script\DefaultLanguageSetting.cs" />
+    <Compile Include="Config\Script\EnumRunConfig.cs" />
+    <Compile Include="Config\Script\DefaultRangeSettings.cs" />
+    <Compile Include="Config\Script\EnumRunControl.cs" />
+    <Compile Include="Config\Script\EnumRunOption.cs" />
     <Compile Include="Functions.cs" />
     <Compile Include="Item.cs" />
-    <Compile Include="Language.cs" />
+    <Compile Include="Config\Script\Language.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Range.cs" />
-    <Compile Include="Script.cs" />
+    <Compile Include="Config\Script\Range.cs" />
+    <Compile Include="Config\Script\Script.cs" />
     <Compile Include="Config\Serialize\DataSerializer.cs" />
     <Compile Include="Config\Serialize\SerializableDictionary.cs" />
   </ItemGroup>
