@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Management;
+using System.Security.Principal;
+using System.Net.NetworkInformation;
+using System.Threading;
 
 namespace EnumRun
 {
@@ -66,10 +69,51 @@ namespace EnumRun
         /// ドメインユーザーかどうか
         /// </summary>
         /// <returns>ドメインユーザーであればtrue</returns>
-        public bool IsDomainUser()
+        public static bool IsDomainUser()
         {
             return !IsSystemAccount() && IsDomainMachine() && (Environment.UserDomainName != Environment.MachineName);
         }
+
+        /// <summary>
+        /// デフォルトゲートウェイへの導通可否確認
+        /// </summary>
+        /// <returns>導通可の場合true</returns>
+        public static bool IsDefaultGatewayReachable()
+        {
+            int count = 4;
+            int interval = 500;
+            Ping ping = new Ping();
+            foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                foreach (GatewayIPAddressInformation gw in nic.GetIPProperties().GatewayAddresses)
+                {
+                    for (int i = 0; i < count; i++)
+                    {
+                        PingReply reply = ping.Send(gw.Address);
+                        if (reply.Status == IPStatus.Success)
+                        {
+                            return true;
+                        }
+                        Thread.Sleep(interval);
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 管理者実行しているかどうかの確認
+        /// </summary>
+        /// <returns>管理者として実行しているのならばtrue</returns>
+        public static bool IsRunAdministrator()
+        {
+            WindowsIdentity id = WindowsIdentity.GetCurrent();
+            WindowsPrincipal principal = new WindowsPrincipal(id);
+            bool isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
+            return isAdmin;
+        }
+
+
 
     }
 }

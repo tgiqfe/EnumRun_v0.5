@@ -137,12 +137,45 @@ namespace EnumRun
             //  実行対象外
             if (CheckOption(EnumRunOption.NoRun)) { return; }
 
+            //  ドメイン参加済みPCのみ ro ワークグループPCのみ
+            if(
+                (CheckOption(EnumRunOption.DomainPCOnly) && !CheckOption(EnumRunOption.WorkgroupPCOnly) && !Functions.IsDomainMachine()) ||
+                (!CheckOption(EnumRunOption.DomainPCOnly) && CheckOption(EnumRunOption.WorkgroupPCOnly) && Functions.IsDomainMachine()))
+            {
+                return;
+            }
+
+            //  システムアカウントのみ
+            if (CheckOption(EnumRunOption.SystemAccountOnly) && !Functions.IsSystemAccount())
+            {
+                return;
+            }
+
+            //  ドメインユーザーのみ or ローカルユーザーのみ
+            if ((CheckOption(EnumRunOption.DomainUserOnly) && !CheckOption(EnumRunOption.LocalUserOnly) && !Functions.IsDomainUser()) ||
+                (!CheckOption(EnumRunOption.DomainUserOnly) && CheckOption(EnumRunOption.LocalUserOnly) && Functions.IsDomainUser()))
+            {
+                return;
+            }
+
+            //  デフォルトゲートウェイとの通信可否を確認
+            if (CheckOption(EnumRunOption.DGReachableOnly) && !Functions.IsDefaultGatewayReachable())
+            {
+                return;
+            }
+
+            //  管理者として実行しているかどうかの確認
+            if (CheckOption(EnumRunOption.TrustedOnly) && !Functions.IsRunAdministrator())
+            {
+                return;
+            }
+
             //  実行前待機
             if (BeforeTime > 0) { Thread.Sleep(BeforeTime * 1000); }
 
             //  プロセス開始
             Task task = CheckOption(EnumRunOption.Output) ?
-                ProcessThread("標準出力先ファイル名") :
+                ProcessThread("aaaaaaaaaaaaaaaa.txt") :
                 ProcessThread();
             if (CheckOption(EnumRunOption.WaitForExit)) { task.Wait(); }
 
@@ -150,6 +183,10 @@ namespace EnumRun
             if (AfterTime > 0) { Thread.Sleep(AfterTime * 1000); }
         }
 
+        /// <summary>
+        /// プロセス実行するメソッド
+        /// </summary>
+        /// <returns></returns>
         private async Task ProcessThread()
         {
             await Task.Run(() =>
