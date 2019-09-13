@@ -10,8 +10,6 @@ namespace EnumRun.Cmdlet
     [Cmdlet(VerbsCommon.Set, "EnumRunConfig")]
     public class SetEnumRunConfig : PSCmdlet
     {
-        [Parameter(Position = 0)]
-        public string Name { get; set; }
         [Parameter]
         public string FilesPath { get; set; }
         [Parameter]

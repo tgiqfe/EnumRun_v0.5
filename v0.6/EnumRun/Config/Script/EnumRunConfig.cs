@@ -9,7 +9,6 @@ namespace EnumRun
 {
     public class EnumRunConfig
     {
-        public string Name { get; set; }
         public string FilesPath { get; set; }
         public string LogsPath { get; set; }
         public string OutputPath { get; set; }
@@ -20,7 +19,6 @@ namespace EnumRun
         public EnumRunConfig() { }
         public EnumRunConfig(bool isDefault)
         {
-            this.Name = "EnumRun";
             this.FilesPath = Path.Combine(Item.WORK_DIR, "Files");
             this.LogsPath = Path.Combine(Item.WORK_DIR, "Logs");
             this.OutputPath = Path.Combine(Item.WORK_DIR, "Output");
