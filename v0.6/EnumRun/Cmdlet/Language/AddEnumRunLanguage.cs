@@ -26,6 +26,13 @@ namespace EnumRun.Cmdlet
         public string ArgsMidWithArgs { get; set; }
         [Parameter]
         public string ArgsSuffix { get; set; }
+        [Parameter]
+        public string Path { get; set; }
+
+        protected override void BeginProcessing()
+        {
+            Item.Config = EnumRunConfig.Load();
+        }
 
         protected override void ProcessRecord()
         {
@@ -40,7 +47,8 @@ namespace EnumRun.Cmdlet
                 ArgsMidWithArgs = this.ArgsMidWithArgs,
                 ArgsSuffix = this.ArgsSuffix
             };
-            WriteObject(lang);
+            Item.Config.Languages[Name] = lang;
+            Item.Config.Save(Path);
         }
     }
 }

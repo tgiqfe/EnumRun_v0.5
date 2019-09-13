@@ -12,12 +12,12 @@ namespace EnumRun.Cmdlet
     {
         protected override void BeginProcessing()
         {
-            Item.Config = EnumRunControl.Read();
+            Item.Config = EnumRunConfig.Load();
         }
 
         protected override void ProcessRecord()
         {
-            EnumRunControl.StartEnumRun("ShutdownScript");
+            Functions.StartEnumRun("ShutdownScript");
         }
     }
 }

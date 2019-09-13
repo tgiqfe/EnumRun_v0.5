@@ -21,7 +21,8 @@ namespace Manifest
             if (!File.Exists(dllFile)) { return; }
 
             List<string> CmdletsToExport = new List<string>();
-            foreach (string csFile in Directory.GetFiles(outputDir, "*.cs", SearchOption.AllDirectories))
+            string cmdletDir = @"..\..\..\" + projectName + @"\Cmdlet";
+            foreach (string csFile in Directory.GetFiles(cmdletDir, "*.cs", SearchOption.AllDirectories))
             {
                 using (StreamReader sr = new StreamReader(csFile, Encoding.UTF8))
                 {

@@ -29,6 +29,40 @@ namespace EnumRun
         }
 
         /// <summary>
+        /// 列挙実行開始
+        /// </summary>
+        /// <param name="processName">プロセス名</param>
+        public static void StartEnumRun(string processName)
+        {
+            if (Item.Config.Ranges.ContainsKey(processName))
+            {
+                int startNum = Item.Config.Ranges[processName].StartNumber;
+                int endNum = Item.Config.Ranges[processName].EndNumber;
+
+                if (Directory.Exists(Item.Config.FilesPath))
+                {
+                    //  スクリプトファイルの列挙
+                    List<Script> scriptList = new List<Script>();
+                    foreach (string scriptFile in Directory.GetFiles(Item.Config.FilesPath))
+                    {
+                        Script script = new Script(scriptFile, startNum, endNum);
+                        if (script.Enabled)
+                        {
+                            scriptList.Add(script);
+                            //DataSerializer.Serialize<Script>(script, Console.Out, ".json");
+                        }
+                    }
+
+                    //  スクリプトファイルの実行
+                    foreach (Script script in scriptList)
+                    {
+                        script.Process();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Active Directoryドメインの名前を取得
         /// </summary>
         private static string _domainName = null;
@@ -112,8 +146,5 @@ namespace EnumRun
             bool isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
             return isAdmin;
         }
-
-
-
     }
 }

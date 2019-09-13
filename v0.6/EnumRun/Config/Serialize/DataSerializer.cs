@@ -19,7 +19,7 @@ namespace EnumRun
     {
         //  静的パラメータ
         private static XmlSerializerNamespaces XmlSerializer_Namespaces = null;
-        private static Func<JsonSerializerSettings> JsonConvert_DefaultSettings = null;
+        //private static Func<JsonSerializerSettings> JsonConvert_DefaultSettings = null;
 
         //  デシリアライズ
         public static T Deserialize<T>(string fileName) where T : class, new()
@@ -78,6 +78,17 @@ namespace EnumRun
                     new XmlSerializer(typeof(T)).Serialize(tw, obj, XmlSerializer_Namespaces);
                     break;
                 case ".json":
+                    JsonConvert.DefaultSettings = (() =>
+                    {
+                        JsonSerializerSettings settings = new JsonSerializerSettings()
+                        {
+                            Formatting = Newtonsoft.Json.Formatting.Indented,
+                            NullValueHandling = NullValueHandling.Ignore,
+                        };
+                        settings.Converters.Add(new StringEnumConverter());
+                        return settings;
+                    });
+                    /*
                     if (JsonConvert_DefaultSettings == null)
                     {
                         JsonConvert_DefaultSettings = (() =>
@@ -87,11 +98,12 @@ namespace EnumRun
                                 Formatting = Newtonsoft.Json.Formatting.Indented,
                                 NullValueHandling = NullValueHandling.Ignore,
                             };
-                            settings.Converters.Add(new StringEnumConverter());
+                            settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
                             return settings;
                         });
                         JsonConvert.DefaultSettings = JsonConvert_DefaultSettings;
                     }
+                    */
                     tw.WriteLine(JsonConvert.SerializeObject(obj));
                     break;
                 case ".yml":
