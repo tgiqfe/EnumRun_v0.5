@@ -10,12 +10,27 @@ namespace EnumRun.Cmdlet
     [Cmdlet(VerbsCommon.Remove, "EnumRunLanguage")]
     public class RemoveEnumRunLanguage : PSCmdlet
     {
-        [Parameter(Mandatory = true, Position = 0)]
+        [Parameter(ValueFromPipeline = true)]
+        public Language Language { get; set; }
+        [Parameter(Position = 0)]
         public string Name { get; set; }
+
+        protected override void BeginProcessing()
+        {
+            Item.Config = EnumRunConfig.Load();
+        }
 
         protected override void ProcessRecord()
         {
-
+            if (Language == null && !string.IsNullOrEmpty(Name))
+            {
+                Item.Config.Languages.Remove(Name);
+            }
+            else
+            {
+                Item.Config.Languages.Remove(Language.Name);
+            }
+            Item.Config.Save();
         }
     }
 }

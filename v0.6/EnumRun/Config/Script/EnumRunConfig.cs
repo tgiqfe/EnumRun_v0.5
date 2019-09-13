@@ -17,8 +17,6 @@ namespace EnumRun
         public SerializableDictionary<string, Range> Ranges { get; set; }
         public SerializableDictionary<string, Language> Languages { get; set; }
 
-        private string _fileName = null;
-
         public EnumRunConfig() { }
         public EnumRunConfig(bool isDefault)
         {
@@ -49,7 +47,7 @@ namespace EnumRun
         }
 
         /// <summary>
-        /// 設定内容を保存
+        /// 設定を保存
         /// </summary>
         public void Save()
         {

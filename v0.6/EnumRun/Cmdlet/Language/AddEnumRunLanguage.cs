@@ -10,7 +10,9 @@ namespace EnumRun.Cmdlet
     [Cmdlet(VerbsCommon.Add, "EnumRunLanguage")]
     public class AddEnumRunLanguage : PSCmdlet
     {
-        [Parameter(Mandatory = true, Position = 0)]
+        [Parameter(ValueFromPipeline = true)]
+        public Language Language { get; set; }
+        [Parameter(Position = 0)]
         public string Name { get; set; }
         [Parameter]
         public string[] Extensions { get; set; }
@@ -26,8 +28,6 @@ namespace EnumRun.Cmdlet
         public string ArgsMidWithArgs { get; set; }
         [Parameter]
         public string ArgsSuffix { get; set; }
-        [Parameter]
-        public string Path { get; set; }
 
         protected override void BeginProcessing()
         {
@@ -36,19 +36,26 @@ namespace EnumRun.Cmdlet
 
         protected override void ProcessRecord()
         {
-            Language lang = new Language()
+            if(Language == null)
             {
-                Name = this.Name,
-                Extensions = this.Extensions,
-                Command = this.Command,
-                Command_x86 = this.Command_x86,
-                ArgsPrefix = this.ArgsPrefix,
-                ArgsMidWithoutArgs = this.ArgsMidWithoutArgs,
-                ArgsMidWithArgs = this.ArgsMidWithArgs,
-                ArgsSuffix = this.ArgsSuffix
-            };
-            Item.Config.Languages[Name] = lang;
-            Item.Config.Save(Path);
+                Language lang = new Language()
+                {
+                    Name = this.Name,
+                    Extensions = this.Extensions,
+                    Command = this.Command,
+                    Command_x86 = this.Command_x86,
+                    ArgsPrefix = this.ArgsPrefix,
+                    ArgsMidWithoutArgs = this.ArgsMidWithoutArgs,
+                    ArgsMidWithArgs = this.ArgsMidWithArgs,
+                    ArgsSuffix = this.ArgsSuffix
+                };
+                Item.Config.Languages[Name] = lang;
+            }
+            else
+            {
+                Item.Config.Languages[Language.Name] = Language;
+            }
+            Item.Config.Save();
         }
     }
 }
