@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cmdlet\ConvertEnumRunConfig.cs" />
+    <Compile Include="Cmdlet\Language\GetEnumRunLanguage.cs" />
     <Compile Include="Cmdlet\Range\AddEnumRunRange.cs" />
     <Compile Include="Cmdlet\GetEnumRunConfig.cs" />
     <Compile Include="Cmdlet\Language\RemoveEnumRunLanguage.cs" />

@@ -11,7 +11,7 @@ namespace EnumRun.Cmdlet
     public class AddEnumRunLanguage : PSCmdlet
     {
         [Parameter(ValueFromPipeline = true)]
-        public Language Language { get; set; }
+        public Language[] Language { get; set; }
         [Parameter(Position = 0)]
         public string Name { get; set; }
         [Parameter]
@@ -61,15 +61,13 @@ namespace EnumRun.Cmdlet
             }
             else if (Language != null)
             {
-                Language lang = Item.Config.GetLanguage(Language.Name);
-                if (lang == null)
+                foreach (Language addLang in Language)
                 {
-                    Item.Config.Languages.Add(Language);
-                }
-                else
-                {
-                    //  すでに同じ名前のLanguageがある為、追加不可
-                    return;
+                    Language lang = Item.Config.GetLanguage(addLang.Name);
+                    if (lang == null)
+                    {
+                        Item.Config.Languages.Add(addLang);
+                    }
                 }
             }
             Item.Config.Save();

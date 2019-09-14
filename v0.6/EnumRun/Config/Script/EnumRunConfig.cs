@@ -70,25 +70,6 @@ namespace EnumRun
             DataSerializer.Serialize<EnumRunConfig>(this, fileName);
         }
 
-        /*
-        public bool ContainsLanguage(string name)
-        {
-            return Languages.Any(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-        }
-        public bool ContainsLanguage(Language lang)
-        {
-            return Languages.Any(x => x.Name.Equals(lang.Name, StringComparison.OrdinalIgnoreCase));
-        }
-        public bool ContainsRange(string name)
-        {
-            return Ranges.Any(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-        }
-        public bool ContainsRange(Range range)
-        {
-            return Ranges.Any(x => x.Name.Equals(range.Name, StringComparison.OrdinalIgnoreCase));
-        }
-        */
-
         public Language GetLanguage(string name)
         {
             return Languages.FirstOrDefault(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));

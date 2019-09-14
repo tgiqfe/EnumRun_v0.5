@@ -41,7 +41,6 @@ namespace EnumRun.Cmdlet
                 Language lang = Item.Config.GetLanguage(Name);
                 if (lang == null)
                 {
-
                     Item.Config.Languages.Add(new Language()
                     {
                         Name = this.Name,

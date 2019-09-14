@@ -12,7 +12,7 @@ namespace EnumRun.Cmdlet
     public class ConvertEnumRunConfig : PSCmdlet
     {
         [Parameter, ValidateSet(Item.JSON, Item.XML, Item.YML)]
-        public string DataType { get; set; }
+        public string DataType { get; set; } = Item.JSON;
 
         protected override void BeginProcessing()
         {
