@@ -28,17 +28,26 @@ namespace EnumRun.Cmdlet
         {
             if (Range == null && !string.IsNullOrEmpty(Name))
             {
-                Range range = new Range()
+                if (Item.Config.ContainsRange(Name))
+                {
+                    //  すでに同じ名前のRangeがある為、追加不可
+                    return;
+                }
+
+                Item.Config.Ranges.Add(new Range()
                 {
                     Name = this.Name,
                     StartNumber = this.StartNumber,
                     EndNumber = this.EndNumber
-                };
-                //  重複した場合は?
-                Item.Config.Ranges.Add(range);
+                });
             }
             else if (Range != null)
             {
+                if (Item.Config.ContainsRange(Range))
+                {
+                    //  すでに同じ名前のLanguageがある為、追加不可
+                    return;
+                }
                 Item.Config.Ranges.Add(Range);
             }
             Item.Config.Save();
