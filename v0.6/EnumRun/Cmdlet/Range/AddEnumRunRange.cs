@@ -13,7 +13,7 @@ namespace EnumRun.Cmdlet
         [Parameter(ValueFromPipeline = true)]
         public Range Range { get; set; }
         [Parameter(Position = 0)]
-        public string ProcessName { get; set; }
+        public string Name { get; set; }
         [Parameter(Position = 1)]
         public int StartNumber { get; set; }
         [Parameter(Position = 2)]
@@ -26,11 +26,11 @@ namespace EnumRun.Cmdlet
 
         protected override void ProcessRecord()
         {
-            if (Range == null && !string.IsNullOrEmpty(ProcessName))
+            if (Range == null && !string.IsNullOrEmpty(Name))
             {
                 Range range = new Range()
                 {
-                    ProcessName = this.ProcessName,
+                    Name = this.Name,
                     StartNumber = this.StartNumber,
                     EndNumber = this.EndNumber
                 };

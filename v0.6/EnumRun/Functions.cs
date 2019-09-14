@@ -34,7 +34,7 @@ namespace EnumRun
         /// <param name="processName">プロセス名</param>
         public static void StartEnumRun(string processName)
         {
-            Range range = Item.Config.Ranges.FirstOrDefault(x => x.ProcessName.Equals(processName, StringComparison.OrdinalIgnoreCase));
+            Range range = Item.Config.Ranges.FirstOrDefault(x => x.Name.Equals(processName, StringComparison.OrdinalIgnoreCase));
             if (range != null)
             //if (Item.Config.Ranges.ContainsKey(processName))
             //if(Item.Config.Ranges.Any(x => x.ProcessName.Equals(processName, StringComparison.OrdinalIgnoreCase)))

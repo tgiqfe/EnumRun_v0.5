@@ -18,66 +18,29 @@ namespace EnumRun
 
             list.Add(new Range()
             {
-                ProcessName = startupScript,
+                Name = startupScript,
                 StartNumber = 0,
                 EndNumber = 9
             });
             list.Add(new Range()
             {
-                ProcessName = logonScript,
+                Name = logonScript,
                 StartNumber = 11,
                 EndNumber = 29
             });
             list.Add(new Range()
             {
-                ProcessName = logoffScript,
+                Name = logoffScript,
                 StartNumber = 81,
                 EndNumber = 89
             });
             list.Add(new Range()
             {
-                ProcessName = shutdownScript,
+                Name = shutdownScript,
                 StartNumber = 91,
                 EndNumber = 99,
             });
             return list;
         }
-        /*
-        public static SerializableDictionary<string, Range> Create()
-        {
-            SerializableDictionary<string, Range> ranges = new SerializableDictionary<string, Range>();
-
-            string startupScript = "StartupScript";
-            string logonScript = "LogonScript";
-            string logoffScript = "LogoffScript";
-            string shutdownScript = "ShutdownScript";
-
-            ranges[startupScript] = new Range()
-            {
-                ProcessName = startupScript,
-                StartNumber = 0,
-                EndNumber = 9
-            };
-            ranges[logonScript] = new Range()
-            {
-                ProcessName = logonScript,
-                StartNumber = 11,
-                EndNumber = 29
-            };
-            ranges[logoffScript] =new Range()
-            {
-                ProcessName = logoffScript,
-                StartNumber = 81,
-                EndNumber = 89
-            };
-            ranges[shutdownScript] =new Range()
-            {
-                ProcessName = shutdownScript,
-                StartNumber = 91,
-                EndNumber = 99,
-            };
-            return ranges;
-        }
-        */
     }
 }

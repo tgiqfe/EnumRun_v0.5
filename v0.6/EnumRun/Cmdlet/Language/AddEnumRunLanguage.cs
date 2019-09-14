@@ -36,9 +36,15 @@ namespace EnumRun.Cmdlet
 
         protected override void ProcessRecord()
         {
-            if(Language == null && !string.IsNullOrEmpty(Name))
+            if (Language == null && !string.IsNullOrEmpty(Name))
             {
-                Language lang = new Language()
+                if (Item.Config.ContainsLanguage(Name))
+                {
+                    //  すでに同じ名前のLanguageがある為、追加不可
+                    return;
+                }
+
+                Item.Config.Languages.Add(new Language()
                 {
                     Name = this.Name,
                     Extensions = this.Extensions,
@@ -48,13 +54,16 @@ namespace EnumRun.Cmdlet
                     ArgsMidWithoutArgs = this.ArgsMidWithoutArgs,
                     ArgsMidWithArgs = this.ArgsMidWithArgs,
                     ArgsSuffix = this.ArgsSuffix
-                };
-                //  重複した場合は?
-                //Item.Config.Languages[Name] = lang;
+                });
             }
-            else if(Language != null)
+            else if (Language != null)
             {
-                //Item.Config.Languages[Language.Name] = Language;
+                if (Item.Config.ContainsLanguage(Language))
+                {
+                    //  すでに同じ名前のLanguageがある為、追加不可
+                    return;
+                }
+                Item.Config.Languages.Add(Language);
             }
             Item.Config.Save();
         }
