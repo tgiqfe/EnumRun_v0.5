@@ -38,43 +38,44 @@ namespace EnumRun.Cmdlet
         {
             if (Language == null && !string.IsNullOrEmpty(Name))
             {
-                //Language lang = Item.Config.Languages.FirstOrDefault(x =>
-                //    x.Value.Name.Equals(Name, StringComparison.OrdinalIgnoreCase)).Value;
-                //Language lang = Item.Config.Languages.FirstOrDefault(x =>
-                //    x.Name.Equals(Name, StringComparison.OrdinalIgnoreCase));
-                int index = Item.Config.Languages.FindIndex(x => x.Name.Equals(Name, StringComparison.OrdinalIgnoreCase));
-                if (Extensions != null) { Item.Config.Languages[index].Extensions = Extensions; }
-                if (Command != null) { Item.Config.Languages[index].Command = Command; }
-                if (Command_x86 != null) { Item.Config.Languages[index].Command_x86 = Command_x86; }
-                if (ArgsPrefix != null) { Item.Config.Languages[index].ArgsPrefix = ArgsPrefix; }
-                if (ArgsMidWithoutArgs != null) { Item.Config.Languages[index].ArgsMidWithoutArgs = ArgsMidWithoutArgs; }
-                if (ArgsMidWithArgs != null) { Item.Config.Languages[index].ArgsMidWithArgs = ArgsMidWithArgs; }
-                if (ArgsSuffix != null) { Item.Config.Languages[index].ArgsSuffix = ArgsSuffix; }
+                Language lang = Item.Config.GetLanguage(Name);
+                if (lang == null)
+                {
 
-                //  値を直接変更なので、代入し直す必要がないと思われる。
-
-                //Item.Config.Languages[Name] = lang;
+                    Item.Config.Languages.Add(new Language()
+                    {
+                        Name = this.Name,
+                        Extensions = this.Extensions,
+                        Command = this.Command,
+                        Command_x86 = this.Command_x86,
+                        ArgsPrefix = this.ArgsPrefix,
+                        ArgsMidWithoutArgs = this.ArgsMidWithoutArgs,
+                        ArgsMidWithArgs = this.ArgsMidWithArgs,
+                        ArgsSuffix = this.ArgsSuffix
+                    });
+                }
+                else
+                {
+                    if (Extensions != null) { lang.Extensions = Extensions; }
+                    if (Command != null) { lang.Command = Command; }
+                    if (Command_x86 != null) { lang.Command_x86 = Command_x86; }
+                    if (ArgsPrefix != null) { lang.ArgsPrefix = ArgsPrefix; }
+                    if (ArgsMidWithoutArgs != null) { lang.ArgsMidWithoutArgs = ArgsMidWithoutArgs; }
+                    if (ArgsMidWithArgs != null) { lang.ArgsMidWithArgs = ArgsMidWithArgs; }
+                    if (ArgsSuffix != null) { lang.ArgsSuffix = ArgsSuffix; }
+                }
             }
             else if (Language != null)
             {
-                if (Name != null) { Language.Name = Name; }
-                if (Extensions != null) { Language.Extensions = Extensions; }
-                if (Command != null) { Language.Command = Command; }
-                if (Command_x86 != null) { Language.Command_x86 = Command_x86; }
-                if (ArgsPrefix != null) { Language.ArgsPrefix = ArgsPrefix; }
-                if (ArgsMidWithoutArgs != null) { Language.ArgsMidWithoutArgs = ArgsMidWithoutArgs; }
-                if (ArgsMidWithArgs != null) { Language.ArgsMidWithArgs = ArgsMidWithArgs; }
-                if (ArgsSuffix != null) { Language.ArgsSuffix = ArgsSuffix; }
-
-                int index = Item.Config.Languages.FindIndex(x =>
-                    x.Name.Equals(Name, StringComparison.OrdinalIgnoreCase));
-                if(index >= 0)
+                Language lang = Item.Config.GetLanguage(Name);
+                if (lang == null)
                 {
-
+                    Item.Config.Languages.Add(Language);
                 }
-
-
-                //Item.Config.Languages[Language.Name] = Language;
+                else
+                {
+                    lang = Language;
+                }
             }
             Item.Config.Save();
         }

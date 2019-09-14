@@ -24,18 +24,18 @@ namespace EnumRun.Cmdlet
         {
             if (Language == null && !string.IsNullOrEmpty(Name))
             {
-                if (Item.Config.ContainsLanguage(Name))
+                Language lang = Item.Config.GetLanguage(Name);
+                if (lang != null)
                 {
-                    int index = Item.Config.Languages.FindIndex(x => 
-                        x.Name.Equals(Name, StringComparison.OrdinalIgnoreCase));
-                    Item.Config.Languages.RemoveAt(index);
+                    Item.Config.Languages.Remove(lang);
                 }
             }
             else if (Language != null)
             {
-                if (Item.Config.ContainsLanguage(Language))
+                Language lang = Item.Config.GetLanguage(Language.Name);
+                if (lang != null)
                 {
-                    int index = Item.Config.Languages.FindIndex(x => 
+                    int index = Item.Config.Languages.FindIndex(x =>
                         x.Name.Equals(Language.Name, StringComparison.OrdinalIgnoreCase));
                     Item.Config.Languages.RemoveAt(index);
                 }

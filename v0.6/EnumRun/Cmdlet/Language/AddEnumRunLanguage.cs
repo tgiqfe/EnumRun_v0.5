@@ -38,32 +38,39 @@ namespace EnumRun.Cmdlet
         {
             if (Language == null && !string.IsNullOrEmpty(Name))
             {
-                if (Item.Config.ContainsLanguage(Name))
+                Language lang = Item.Config.GetLanguage(Name);
+                if (lang == null)
+                {
+                    Item.Config.Languages.Add(new Language()
+                    {
+                        Name = this.Name,
+                        Extensions = this.Extensions,
+                        Command = this.Command,
+                        Command_x86 = this.Command_x86,
+                        ArgsPrefix = this.ArgsPrefix,
+                        ArgsMidWithoutArgs = this.ArgsMidWithoutArgs,
+                        ArgsMidWithArgs = this.ArgsMidWithArgs,
+                        ArgsSuffix = this.ArgsSuffix
+                    });
+                }
+                else
                 {
                     //  すでに同じ名前のLanguageがある為、追加不可
                     return;
                 }
-
-                Item.Config.Languages.Add(new Language()
-                {
-                    Name = this.Name,
-                    Extensions = this.Extensions,
-                    Command = this.Command,
-                    Command_x86 = this.Command_x86,
-                    ArgsPrefix = this.ArgsPrefix,
-                    ArgsMidWithoutArgs = this.ArgsMidWithoutArgs,
-                    ArgsMidWithArgs = this.ArgsMidWithArgs,
-                    ArgsSuffix = this.ArgsSuffix
-                });
             }
             else if (Language != null)
             {
-                if (Item.Config.ContainsLanguage(Language))
+                Language lang = Item.Config.GetLanguage(Language.Name);
+                if (lang == null)
+                {
+                    Item.Config.Languages.Add(Language);
+                }
+                else
                 {
                     //  すでに同じ名前のLanguageがある為、追加不可
                     return;
                 }
-                Item.Config.Languages.Add(Language);
             }
             Item.Config.Save();
         }
