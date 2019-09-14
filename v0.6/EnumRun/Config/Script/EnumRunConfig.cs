@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace EnumRun
 {
@@ -70,9 +71,22 @@ namespace EnumRun
             DataSerializer.Serialize<EnumRunConfig>(this, fileName);
         }
 
-        public Language GetLanguage(string name)
+        public Language[] GetLanguage(string name)
         {
-            return Languages.FirstOrDefault(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            string patternString = Regex.Replace(name, ".",
+                x =>
+                {
+                    string y = x.Value;
+                    if (y.Equals("?")) { return "."; }
+                    else if (y.Equals("*")) { return ".*"; }
+                    else { return Regex.Escape(y); }
+                });
+            if (!patternString.StartsWith("*")) { patternString = "^" + patternString; }
+            if (!patternString.EndsWith("*")) { patternString = patternString + "$"; }
+            Regex regPattern = new Regex(patternString, RegexOptions.IgnoreCase);
+
+            //return Languages.FirstOrDefault(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return Languages.Where(x => regPattern.IsMatch(x.Name)).ToArray();
         }
         public Range GetRange(string name)
         {

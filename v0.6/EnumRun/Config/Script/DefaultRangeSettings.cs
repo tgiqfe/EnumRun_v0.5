@@ -19,7 +19,7 @@ namespace EnumRun
             list.Add(new Range()
             {
                 Name = startupScript,
-                StartNumber = 0,
+                StartNumber = 1,
                 EndNumber = 9
             });
             list.Add(new Range()

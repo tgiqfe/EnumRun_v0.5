@@ -20,9 +20,9 @@ namespace EnumRun.Cmdlet
         [Parameter]
         public SwitchParameter DebugMode { get; set; }
         [Parameter]
-        public List<Range> Ranges { get; set; }
+        public Range[] Ranges { get; set; }
         [Parameter]
-        public List<Language> Languages { get; set; }
+        public Language[] Languages { get; set; }
         [Parameter]
         public SwitchParameter DefaultSetting { get; set; }
         [Parameter, ValidateSet(Item.JSON, Item.XML, Item.YML)]
@@ -71,8 +71,8 @@ namespace EnumRun.Cmdlet
                 if (LogsPath != null) { Item.Config.LogsPath = this.LogsPath; }
                 if (OutputPath != null) { Item.Config.OutputPath = this.OutputPath; }
                 if (DebugMode) { Item.Config.DebugMode = true; }
-                if (Ranges != null) { Item.Config.Ranges = this.Ranges; }
-                if (Languages != null) { Item.Config.Languages = this.Languages; }
+                if (Ranges != null) { Item.Config.Ranges = new List<Range>(Ranges); }
+                if (Languages != null) { Item.Config.Languages = new List<Language>(Languages); }
             }
             Item.Config.Save();
             WriteObject(Item.Config);

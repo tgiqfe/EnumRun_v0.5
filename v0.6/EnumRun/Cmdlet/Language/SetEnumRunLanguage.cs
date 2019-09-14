@@ -38,42 +38,40 @@ namespace EnumRun.Cmdlet
         {
             if (Language == null && !string.IsNullOrEmpty(Name))
             {
-                Language lang = Item.Config.GetLanguage(Name);
-                if (lang == null)
+                Language[] langs = Item.Config.GetLanguage(Name);
+                if (langs != null && langs.Length > 0)
                 {
-                    Item.Config.Languages.Add(new Language()
+                    foreach (Language lang in langs)
                     {
-                        Name = this.Name,
-                        Extensions = this.Extensions,
-                        Command = this.Command,
-                        Command_x86 = this.Command_x86,
-                        ArgsPrefix = this.ArgsPrefix,
-                        ArgsMidWithoutArgs = this.ArgsMidWithoutArgs,
-                        ArgsMidWithArgs = this.ArgsMidWithArgs,
-                        ArgsSuffix = this.ArgsSuffix
-                    });
+                        if (Extensions != null) { lang.Extensions = Extensions; }
+                        if (Command != null) { lang.Command = Command; }
+                        if (Command_x86 != null) { lang.Command_x86 = Command_x86; }
+                        if (ArgsPrefix != null) { lang.ArgsPrefix = ArgsPrefix; }
+                        if (ArgsMidWithoutArgs != null) { lang.ArgsMidWithoutArgs = ArgsMidWithoutArgs; }
+                        if (ArgsMidWithArgs != null) { lang.ArgsMidWithArgs = ArgsMidWithArgs; }
+                        if (ArgsSuffix != null) { lang.ArgsSuffix = ArgsSuffix; }
+                    }
                 }
                 else
                 {
-                    if (Extensions != null) { lang.Extensions = Extensions; }
-                    if (Command != null) { lang.Command = Command; }
-                    if (Command_x86 != null) { lang.Command_x86 = Command_x86; }
-                    if (ArgsPrefix != null) { lang.ArgsPrefix = ArgsPrefix; }
-                    if (ArgsMidWithoutArgs != null) { lang.ArgsMidWithoutArgs = ArgsMidWithoutArgs; }
-                    if (ArgsMidWithArgs != null) { lang.ArgsMidWithArgs = ArgsMidWithArgs; }
-                    if (ArgsSuffix != null) { lang.ArgsSuffix = ArgsSuffix; }
+                    //  存在しない場合は何もしない
+                    return;
                 }
             }
             else if (Language != null)
             {
-                Language lang = Item.Config.GetLanguage(Name);
-                if (lang == null)
+                Language[] langs = Item.Config.GetLanguage(Name);
+                if (langs != null && langs.Length > 0)
                 {
-                    Item.Config.Languages.Add(Language);
+                    for(int i = 0; i < langs.Length; i++)
+                    {
+                        langs[i] = Language;
+                    }
                 }
                 else
                 {
-                    lang = Language;
+                    //  存在しない場合は何もしない
+                    return;
                 }
             }
             Item.Config.Save();

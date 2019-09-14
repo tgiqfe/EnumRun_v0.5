@@ -24,14 +24,25 @@ namespace EnumRun.Cmdlet
         {
             if (Language == null && !string.IsNullOrEmpty(Name))
             {
-                Language lang = Item.Config.GetLanguage(Name);
-                if (lang != null)
+                foreach(Language lang in Item.Config.GetLanguage(Name))
                 {
                     Item.Config.Languages.Remove(lang);
                 }
+                /*
+                Language[] lang = Item.Config.GetLanguage(Name);
+                if (lang != null && lang.Length > 0)
+                {
+                    Item.Config.Languages.Remove(lang);
+                }
+                */
             }
             else if (Language != null)
             {
+                foreach(Language lang in Item.Config.GetLanguage(Language.Name))
+                {
+                    Item.Config.Languages.Remove(lang);
+                }
+                /*
                 Language lang = Item.Config.GetLanguage(Language.Name);
                 if (lang != null)
                 {
@@ -39,6 +50,7 @@ namespace EnumRun.Cmdlet
                         x.Name.Equals(Language.Name, StringComparison.OrdinalIgnoreCase));
                     Item.Config.Languages.RemoveAt(index);
                 }
+                */
             }
             Item.Config.Save();
         }

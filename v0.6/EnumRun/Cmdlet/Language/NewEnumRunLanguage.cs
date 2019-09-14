@@ -34,7 +34,7 @@ namespace EnumRun.Cmdlet
 
         protected override void ProcessRecord()
         {
-            Language lang = new Language()
+            WriteObject(new Language()
             {
                 Name = this.Name,
                 Extensions = this.Extensions,
@@ -44,8 +44,7 @@ namespace EnumRun.Cmdlet
                 ArgsMidWithoutArgs = this.ArgsMidWithoutArgs,
                 ArgsMidWithArgs = this.ArgsMidWithArgs,
                 ArgsSuffix = this.ArgsSuffix
-            };
-            WriteObject(lang);
+            });
         }
     }
 }

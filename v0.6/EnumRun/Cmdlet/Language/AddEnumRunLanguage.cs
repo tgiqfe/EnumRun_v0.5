@@ -38,8 +38,13 @@ namespace EnumRun.Cmdlet
         {
             if (Language == null && !string.IsNullOrEmpty(Name))
             {
-                Language lang = Item.Config.GetLanguage(Name);
-                if (lang == null)
+                Language[] langs = Item.Config.GetLanguage(Name);
+                if (langs != null && langs.Length > 0)
+                {
+                    //  すでに同じ名前のLanguageがある為、追加不可
+                    return;
+                }
+                else
                 {
                     Item.Config.Languages.Add(new Language()
                     {
@@ -53,14 +58,27 @@ namespace EnumRun.Cmdlet
                         ArgsSuffix = this.ArgsSuffix
                     });
                 }
-                else
-                {
-                    //  すでに同じ名前のLanguageがある為、追加不可
-                    return;
-                }
             }
             else if (Language != null)
             {
+                //  Languageインスタンスの追加についての処理を検討中
+                /*
+                foreach (Language lang in Language)
+                {
+                    
+
+                    Language[] langs = Item.Config.GetLanguage(lang.Name);
+                    if (langs != null && langs.Length > 0)
+                    {
+                        //  すでに同じ名前のLanguageがある為、追加不可
+                        return;
+                    }
+                    else
+                    {
+                        foreach()
+                    }
+                }
+
                 foreach (Language addLang in Language)
                 {
                     Language lang = Item.Config.GetLanguage(addLang.Name);
@@ -69,6 +87,7 @@ namespace EnumRun.Cmdlet
                         Item.Config.Languages.Add(addLang);
                     }
                 }
+                */
             }
             Item.Config.Save();
         }
