@@ -11,7 +11,7 @@ namespace EnumRun.Cmdlet
     public class SetEnumRunLanguage : PSCmdlet
     {
         [Parameter(ValueFromPipeline = true)]
-        public Language Language { get; set; }
+        public Language[] Language { get; set; }
         [Parameter(Position = 0)]
         public string Name { get; set; }
         [Parameter]
@@ -60,18 +60,19 @@ namespace EnumRun.Cmdlet
             }
             else if (Language != null)
             {
-                Language[] langs = Item.Config.GetLanguage(Name);
-                if (langs != null && langs.Length > 0)
+                //  パイプラインで渡されたLanguageと名前が一致している場合に上書き
+                foreach (Language lang in Language)
                 {
-                    for(int i = 0; i < langs.Length; i++)
+                    int index = Item.Config.Languages.FindIndex(x => x.Name.Equals(lang.Name, StringComparison.OrdinalIgnoreCase));
+                    if (index >= 0)
                     {
-                        langs[i] = Language;
+                        Item.Config.Languages[index] = lang;
                     }
-                }
-                else
-                {
-                    //  存在しない場合は何もしない
-                    return;
+                    else
+                    {
+                        //  存在しない場合は何もしない
+                        return;
+                    }
                 }
             }
             Item.Config.Save();

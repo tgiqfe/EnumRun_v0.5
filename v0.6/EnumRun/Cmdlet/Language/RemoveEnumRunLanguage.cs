@@ -11,7 +11,7 @@ namespace EnumRun.Cmdlet
     public class RemoveEnumRunLanguage : PSCmdlet
     {
         [Parameter(ValueFromPipeline = true)]
-        public Language Language { get; set; }
+        public Language[] Language { get; set; }
         [Parameter(Position = 0)]
         public string Name { get; set; }
 
@@ -24,7 +24,7 @@ namespace EnumRun.Cmdlet
         {
             if (Language == null && !string.IsNullOrEmpty(Name))
             {
-                foreach(Language lang in Item.Config.GetLanguage(Name))
+                foreach (Language lang in Item.Config.GetLanguage(Name))
                 {
                     Item.Config.Languages.Remove(lang);
                 }
@@ -38,19 +38,11 @@ namespace EnumRun.Cmdlet
             }
             else if (Language != null)
             {
-                foreach(Language lang in Item.Config.GetLanguage(Language.Name))
+                //  名前判定せず、インスタンスの中身が一致したら削除
+                foreach (Language lang in Language)
                 {
                     Item.Config.Languages.Remove(lang);
                 }
-                /*
-                Language lang = Item.Config.GetLanguage(Language.Name);
-                if (lang != null)
-                {
-                    int index = Item.Config.Languages.FindIndex(x =>
-                        x.Name.Equals(Language.Name, StringComparison.OrdinalIgnoreCase));
-                    Item.Config.Languages.RemoveAt(index);
-                }
-                */
             }
             Item.Config.Save();
         }

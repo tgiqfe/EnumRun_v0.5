@@ -71,6 +71,11 @@ namespace EnumRun
             DataSerializer.Serialize<EnumRunConfig>(this, fileName);
         }
 
+        /// <summary>
+        /// 一致する名前のLanguageを取得
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public Language[] GetLanguage(string name)
         {
             string patternString = Regex.Replace(name, ".",
@@ -85,9 +90,15 @@ namespace EnumRun
             if (!patternString.EndsWith("*")) { patternString = patternString + "$"; }
             Regex regPattern = new Regex(patternString, RegexOptions.IgnoreCase);
 
-            //return Languages.FirstOrDefault(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             return Languages.Where(x => regPattern.IsMatch(x.Name)).ToArray();
         }
+        /*
+        public Language GetLanguage(Language lang)
+        {
+            return Languages.FirstOrDefault(x => x.Name.Equals(lang.Name, StringComparison.OrdinalIgnoreCase));
+        }
+        */
+
         public Range GetRange(string name)
         {
             return Ranges.FirstOrDefault(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));

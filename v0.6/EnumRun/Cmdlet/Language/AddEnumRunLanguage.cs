@@ -46,6 +46,7 @@ namespace EnumRun.Cmdlet
                 }
                 else
                 {
+                    //  値を指定の場合は1つずつ追加
                     Item.Config.Languages.Add(new Language()
                     {
                         Name = this.Name,
@@ -61,33 +62,18 @@ namespace EnumRun.Cmdlet
             }
             else if (Language != null)
             {
-                //  Languageインスタンスの追加についての処理を検討中
-                /*
                 foreach (Language lang in Language)
                 {
-                    
-
-                    Language[] langs = Item.Config.GetLanguage(lang.Name);
-                    if (langs != null && langs.Length > 0)
+                    if(Item.Config.Languages.Any(x => x.Name.Equals(lang.Name, StringComparison.OrdinalIgnoreCase)))
                     {
                         //  すでに同じ名前のLanguageがある為、追加不可
                         return;
                     }
                     else
                     {
-                        foreach()
+                        Item.Config.Languages.Add(lang);
                     }
                 }
-
-                foreach (Language addLang in Language)
-                {
-                    Language lang = Item.Config.GetLanguage(addLang.Name);
-                    if (lang == null)
-                    {
-                        Item.Config.Languages.Add(addLang);
-                    }
-                }
-                */
             }
             Item.Config.Save();
         }
