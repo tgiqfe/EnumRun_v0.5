@@ -46,7 +46,7 @@ namespace EnumRun.Cmdlet
                 }
                 else
                 {
-                    //  値を指定の場合は1つずつ追加
+                    //  名前を指定の場合は1つずつ追加
                     Item.Config.Languages.Add(new Language()
                     {
                         Name = this.Name,

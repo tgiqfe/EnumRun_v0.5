@@ -11,7 +11,7 @@ namespace EnumRun.Cmdlet
     public class SetEnumRunRange : PSCmdlet
     {
         [Parameter(ValueFromPipeline = true)]
-        public Range Range { get; set; }
+        public Range[] Range { get; set; }
         [Parameter(Position = 0)]
         public string Name { get; set; }
         [Parameter(Position = 1)]
@@ -28,6 +28,22 @@ namespace EnumRun.Cmdlet
         {
             if (Range == null && !string.IsNullOrEmpty(Name))
             {
+                Range[] ranges = Item.Config.GetRange(Name);
+                if(ranges != null && ranges.Length > 0)
+                {
+                    foreach(Range range in ranges)
+                    {
+                        range.StartNumber = StartNumber;
+                        range.EndNumber = EndNumber;
+                    }
+                }
+                else
+                {
+                    //  存在しない場合は何もしない
+                    return;
+                }
+
+                /*
                 Range range = Item.Config.GetRange(Name);
                 if(range == null)
                 {
@@ -39,18 +55,23 @@ namespace EnumRun.Cmdlet
                     range.StartNumber = StartNumber;
                     range.EndNumber = EndNumber;
                 }
+                */
             }
             else if(Range != null)
             {
-                Range range = Item.Config.GetRange(Name);
-                if(range == null)
+                //  パイプラインで渡されたRangeと名前が一致している場合に上書き
+                foreach(Range range in Range)
                 {
-                    //  存在しない場合は何もしない
-                    return;
-                }
-                else
-                {
-                    range = Range;
+                    int index = Item.Config.Ranges.FindIndex(x => x.Name.Equals(range.Name, StringComparison.OrdinalIgnoreCase));
+                    if(index >= 0)
+                    {
+                        Item.Config.Ranges[index] = range;
+                    }
+                    else
+                    {
+                        //  存在しない場合は何もしない
+                        return;
+                    }
                 }
             }
             Item.Config.Save();

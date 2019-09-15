@@ -11,7 +11,7 @@ namespace EnumRun.Cmdlet
     public class AddEnumRunRange : PSCmdlet
     {
         [Parameter(ValueFromPipeline = true)]
-        public Range Range { get; set; }
+        public Range[] Range { get; set; }
         [Parameter(Position = 0)]
         public string Name { get; set; }
         [Parameter(Position = 1)]
@@ -28,9 +28,15 @@ namespace EnumRun.Cmdlet
         {
             if (Range == null && !string.IsNullOrEmpty(Name))
             {
-                Range range = Item.Config.GetRange(Name);
-                if (range == null)
+                Range[] ranges = Item.Config.GetRange(Name);
+                if (ranges != null && ranges.Length > 0)
                 {
+                    //  すでに同じ名前のRangeがある為、追加不可
+                    return;
+                }
+                else
+                {
+                    //  名前を指定留守場合は1つずつ追加
                     Item.Config.Ranges.Add(new Range()
                     {
                         Name = this.Name,
@@ -38,23 +44,20 @@ namespace EnumRun.Cmdlet
                         EndNumber = this.EndNumber
                     });
                 }
-                else
-                {
-                    //  すでに同じ名前のRangeがある為、追加不可
-                    return;
-                }
             }
             else if (Range != null)
             {
-                Range range = Item.Config.GetRange(Name);
-                if(range == null)
+                foreach (Range range in Range)
                 {
-                    Item.Config.Ranges.Add(Range);
-                }
-                else
-                {
-                    //  すでに同じ名前のLanguageがある為、追加不可
-                    return;
+                    if (Item.Config.Ranges.Any(x => x.Name.Equals(range.Name, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        //  すでに同じ名前のRangeがある為、追加不可
+                        return;
+                    }
+                    else
+                    {
+                        Item.Config.Ranges.Add(range);
+                    }
                 }
             }
             Item.Config.Save();

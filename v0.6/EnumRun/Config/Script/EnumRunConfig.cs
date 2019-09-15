@@ -72,7 +72,7 @@ namespace EnumRun
         }
 
         /// <summary>
-        /// 一致する名前のLanguageを取得
+        /// 一致する名前のLanguage配列を取得
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -92,16 +92,27 @@ namespace EnumRun
 
             return Languages.Where(x => regPattern.IsMatch(x.Name)).ToArray();
         }
-        /*
-        public Language GetLanguage(Language lang)
-        {
-            return Languages.FirstOrDefault(x => x.Name.Equals(lang.Name, StringComparison.OrdinalIgnoreCase));
-        }
-        */
 
-        public Range GetRange(string name)
+        /// <summary>
+        /// 一致する名前のRange配列を取得
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Range[] GetRange(string name)
         {
-            return Ranges.FirstOrDefault(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            string patternString = Regex.Replace(name, ".",
+                x =>
+                {
+                    string y = x.Value;
+                    if (y.Equals("?")) { return "."; }
+                    else if (y.Equals("*")) { return ".*"; }
+                    else { return Regex.Escape(y); }
+                });
+            if (!patternString.StartsWith("*")) { patternString = "^" + patternString; }
+            if (!patternString.EndsWith("*")) { patternString = patternString + "$"; }
+            Regex regPattern = new Regex(patternString, RegexOptions.IgnoreCase);
+
+            return Ranges.Where(x => regPattern.IsMatch(x.Name)).ToArray();
         }
     }
 }
