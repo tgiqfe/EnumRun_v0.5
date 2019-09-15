@@ -18,7 +18,7 @@ namespace EnumRun.Cmdlet
         [Parameter]
         public string OutputPath { get; set; }
         [Parameter]
-        public SwitchParameter DebugMode { get; set; }
+        public bool? DebugMode { get; set; }
         [Parameter]
         public Range[] Ranges { get; set; }
         [Parameter]
@@ -70,7 +70,7 @@ namespace EnumRun.Cmdlet
                 if (FilesPath != null) { Item.Config.FilesPath = this.FilesPath; }
                 if (LogsPath != null) { Item.Config.LogsPath = this.LogsPath; }
                 if (OutputPath != null) { Item.Config.OutputPath = this.OutputPath; }
-                if (DebugMode) { Item.Config.DebugMode = true; }
+                if (DebugMode != null) { Item.Config.DebugMode = (bool)this.DebugMode; }
                 if (Ranges != null) { Item.Config.Ranges = new List<Range>(Ranges); }
                 if (Languages != null) { Item.Config.Languages = new List<Language>(Languages); }
             }

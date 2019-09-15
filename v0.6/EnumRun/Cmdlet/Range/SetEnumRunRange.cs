@@ -42,20 +42,6 @@ namespace EnumRun.Cmdlet
                     //  存在しない場合は何もしない
                     return;
                 }
-
-                /*
-                Range range = Item.Config.GetRange(Name);
-                if(range == null)
-                {
-                    //  存在しない場合は何もしない
-                    return;
-                }
-                else
-                {
-                    range.StartNumber = StartNumber;
-                    range.EndNumber = EndNumber;
-                }
-                */
             }
             else if(Range != null)
             {

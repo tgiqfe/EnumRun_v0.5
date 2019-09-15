@@ -28,13 +28,6 @@ namespace EnumRun.Cmdlet
                 {
                     Item.Config.Ranges.Remove(range);
                 }
-                /*
-                Range range = Item.Config.GetRange(Name);
-                if (range != null)
-                {
-                    Item.Config.Ranges.Remove(range);
-                }
-                */
             }
             else if (Range != null)
             {
@@ -43,15 +36,6 @@ namespace EnumRun.Cmdlet
                 {
                     Item.Config.Ranges.Remove(range);
                 }
-                /*
-                Range range = Item.Config.GetRange(Range.Name);
-                if (range != null)
-                {
-                    int index = Item.Config.Ranges.FindIndex(x =>
-                        x.Name.Equals(Range.Name, StringComparison.OrdinalIgnoreCase));
-                    Item.Config.Ranges.RemoveAt(index);
-                }
-                */
             }
             Item.Config.Save();
         }

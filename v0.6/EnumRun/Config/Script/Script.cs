@@ -184,7 +184,7 @@ namespace EnumRun
 
             //  プロセス開始
             Task task = CheckOption(EnumRunOption.Output) ?
-                ProcessThread("aaaaaaaaaaaaaaaa.txt") :
+                ProcessThreadAndOutput() :
                 ProcessThread();
             if (CheckOption(EnumRunOption.WaitForExit)) { task.Wait(); }
 
@@ -211,8 +211,14 @@ namespace EnumRun
                 }
             });
         }
-        private async Task ProcessThread(string outputFile)
+        private async Task ProcessThreadAndOutput()
         {
+            string outputFile = 
+                Functions.CreateOutputFileName(Item.Config.OutputPath, Path.GetFileNameWithoutExtension(File));
+            if (!Directory.Exists(Item.Config.OutputPath))
+            {
+                Directory.CreateDirectory(Item.Config.OutputPath);
+            }
             await Task.Run(() =>
             {
                 using (Process proc = _Lang.GetProcess(File, Args))

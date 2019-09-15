@@ -14,20 +14,21 @@ namespace EnumRun
         public string LogsPath { get; set; }
         public string OutputPath { get; set; }
         public bool DebugMode { get; set; }
-        //public SerializableDictionary<string, Range> Ranges { get; set; }
-        //public SerializableDictionary<string, Language> Languages { get; set; }
         public List<Range> Ranges { get; set; }
         public List<Language> Languages { get; set; }
 
         public EnumRunConfig() { }
-        public EnumRunConfig(bool isDefault)
+        public EnumRunConfig(bool loadDefault)
         {
-            this.FilesPath = Path.Combine(Item.WORK_DIR, "Files");
-            this.LogsPath = Path.Combine(Item.WORK_DIR, "Logs");
-            this.OutputPath = Path.Combine(Item.WORK_DIR, "Output");
-            this.DebugMode = false;
-            this.Ranges = DefaultRangeSettings.Create();
-            this.Languages = DefaultLanguageSetting.Create();
+            if (loadDefault)
+            {
+                this.FilesPath = Path.Combine(Item.WORK_DIR, "Files");
+                this.LogsPath = Path.Combine(Item.WORK_DIR, "Logs");
+                this.OutputPath = Path.Combine(Item.WORK_DIR, "Output");
+                this.DebugMode = false;
+                this.Ranges = DefaultRangeSettings.Create();
+                this.Languages = DefaultLanguageSetting.Create();
+            }
         }
 
         /// <summary>
@@ -64,9 +65,9 @@ namespace EnumRun
                 //  デフォルトでは C:\ProgramData\EnumRun\Conf\Config.json
                 fileName = Path.Combine(Item.CONF_DIR, "Config.json");
             }
-            if (!Directory.Exists(Path.GetDirectoryName(fileName)))
+            if (!Directory.Exists(Item.CONF_DIR))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+                Directory.CreateDirectory(Item.CONF_DIR);
             }
             DataSerializer.Serialize<EnumRunConfig>(this, fileName);
         }

@@ -9,6 +9,7 @@ using System.Management;
 using System.Security.Principal;
 using System.Net.NetworkInformation;
 using System.Threading;
+using System.Security.Cryptography;
 
 namespace EnumRun
 {
@@ -111,6 +112,17 @@ namespace EnumRun
             WindowsPrincipal principal = new WindowsPrincipal(id);
             bool isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
             return isAdmin;
+        }
+
+        public static string CreateOutputFileName(string outputDir, string solt)
+        {
+            string sourceText = solt + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+            byte[] bytes = md5.ComputeHash(Encoding.UTF8.GetBytes(sourceText));
+            md5.Clear();
+            return Path.Combine(
+                outputDir,
+                sourceText + "_" + BitConverter.ToString(bytes).Replace("-", "") + ".txt");
         }
     }
 }

@@ -28,13 +28,6 @@ namespace EnumRun.Cmdlet
                 {
                     Item.Config.Languages.Remove(lang);
                 }
-                /*
-                Language[] lang = Item.Config.GetLanguage(Name);
-                if (lang != null && lang.Length > 0)
-                {
-                    Item.Config.Languages.Remove(lang);
-                }
-                */
             }
             else if (Language != null)
             {
