@@ -13,7 +13,7 @@ using System.Security.Cryptography;
 
 namespace EnumRun
 {
-    class Functions
+    class Function
     {
         public static string[] SplitComma(string sourceText)
         {
@@ -114,6 +114,12 @@ namespace EnumRun
             return isAdmin;
         }
 
+        /// <summary>
+        /// 標準出力表示の出力先ファイルを取得
+        /// </summary>
+        /// <param name="outputDir">出力先フォルダー</param>
+        /// <param name="solt"></param>
+        /// <returns></returns>
         public static string CreateOutputFileName(string outputDir, string solt)
         {
             string sourceText = solt + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -123,6 +129,47 @@ namespace EnumRun
             return Path.Combine(
                 outputDir,
                 sourceText + "_" + BitConverter.ToString(bytes).Replace("-", "") + ".txt");
+        }
+
+        /// <summary>
+        /// 現在実行している同名のプロセスが1回目かどうかを判定
+        /// </summary>
+        /// <param name="processName"></param>
+        /// <returns>1回目であればtrue</returns>
+        public static bool CheckBootAndLogonSession(string processName)
+        {
+            bool retVal = false;
+
+            //  現在のセッション情報
+            BootAndLogonSession session = new BootAndLogonSession(processName);
+
+            //  前回セッション情報を確認
+            if (!Directory.Exists(Item.TEMP_DIR))
+            {
+                Directory.CreateDirectory(Item.TEMP_DIR);
+            }
+            string sessionFile = Path.Combine(Item.TEMP_DIR, Item.SESSION_FILE);
+            Dictionary<string, BootAndLogonSession> sessionData =
+                DataSerializer.Deserialize<Dictionary<string, BootAndLogonSession>>(sessionFile);
+            if(sessionData == null)
+            {
+                sessionData = new Dictionary<string, BootAndLogonSession>();
+            }
+            if (sessionData.ContainsKey(processName))
+            {
+                retVal = sessionData[processName].BootUpTime != session.BootUpTime &&
+                    !sessionData[processName].LogonIdList.SequenceEqual(session.LogonIdList);
+            }
+            else
+            {
+                retVal = true;
+            }
+
+            //  現在のセッションを保存
+            sessionData[processName] = session;
+            DataSerializer.Serialize<Dictionary<string, BootAndLogonSession>>(sessionData, sessionFile);
+
+            return retVal;
         }
     }
 }

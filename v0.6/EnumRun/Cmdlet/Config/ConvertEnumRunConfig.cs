@@ -24,9 +24,9 @@ namespace EnumRun.Cmdlet
 
         protected override void ProcessRecord()
         {
-            string jsonFile = Path.Combine(Item.CONF_DIR, "Config.json");
-            string xmlFile = Path.Combine(Item.CONF_DIR, "Config.xml");
-            string ymlFile = Path.Combine(Item.CONF_DIR, "Config.yml");
+            string jsonFile = Path.Combine(Item.WORK_DIR, Item.CONFIG_JSON);
+            string xmlFile = Path.Combine(Item.WORK_DIR, Item.CONFIG_XML);
+            string ymlFile = Path.Combine(Item.WORK_DIR, Item.CONFIG_YML);
             if (File.Exists(jsonFile)) { File.Delete(jsonFile); }
             if (File.Exists(xmlFile)) { File.Delete(xmlFile); }
             if (File.Exists(ymlFile)) { File.Delete(ymlFile); }

@@ -20,6 +20,12 @@ namespace EnumRun.Cmdlet
 
         protected override void ProcessRecord()
         {
+            if (Item.Config.SingleRun && !Function.CheckBootAndLogonSession(ProcessName))
+            {
+                //  同セッションで2回目以降の為、終了
+                return;
+            }
+
             Range range = Item.Config.Ranges.FirstOrDefault(x => x.Name.Equals(ProcessName, StringComparison.OrdinalIgnoreCase));
             if (range != null)
             {

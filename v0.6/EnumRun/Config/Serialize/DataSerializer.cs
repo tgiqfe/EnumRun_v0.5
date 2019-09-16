@@ -18,8 +18,7 @@ namespace EnumRun
     class DataSerializer
     {
         //  静的パラメータ
-        private static XmlSerializerNamespaces XmlSerializer_Namespaces = null;
-        //private static Func<JsonSerializerSettings> JsonConvert_DefaultSettings = null;
+        //private static XmlSerializerNamespaces XmlSerializer_Namespaces = null;
 
         //  デシリアライズ
         public static T Deserialize<T>(string fileName) where T : class, new()
@@ -70,12 +69,17 @@ namespace EnumRun
             switch (extension.ToLower())
             {
                 case ".xml":
+                    /*
                     if (XmlSerializer_Namespaces == null)
                     {
                         XmlSerializer_Namespaces = new XmlSerializerNamespaces(
                             new XmlQualifiedName[1] { XmlQualifiedName.Empty });
                     }
-                    new XmlSerializer(typeof(T)).Serialize(tw, obj, XmlSerializer_Namespaces);
+                    */
+                    //new XmlSerializer(typeof(T)).Serialize(tw, obj, XmlSerializer_Namespaces);
+                    new XmlSerializer(typeof(T)).Serialize(tw, obj, 
+                        new XmlSerializerNamespaces(
+                            new XmlQualifiedName[1] { XmlQualifiedName.Empty }));
                     break;
                 case ".json":
                     JsonConvert.DefaultSettings = (() =>

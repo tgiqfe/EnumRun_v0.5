@@ -20,6 +20,8 @@ namespace EnumRun.Cmdlet
         [Parameter]
         public bool? DebugMode { get; set; }
         [Parameter]
+        public bool? SingleRun { get; set; }
+        [Parameter]
         public Range[] Ranges { get; set; }
         [Parameter]
         public Language[] Languages { get; set; }
@@ -41,9 +43,9 @@ namespace EnumRun.Cmdlet
             //  データタイプ指定
             if (DataType != null)
             {
-                string jsonFile = Path.Combine(Item.CONF_DIR, "Config.json");
-                string xmlFile = Path.Combine(Item.CONF_DIR, "Config.xml");
-                string ymlFile = Path.Combine(Item.CONF_DIR, "Config.yml");
+                string jsonFile = Path.Combine(Item.WORK_DIR, Item.CONFIG_JSON);
+                string xmlFile = Path.Combine(Item.WORK_DIR, Item.CONFIG_XML);
+                string ymlFile = Path.Combine(Item.WORK_DIR, Item.CONFIG_YML);
                 if (File.Exists(jsonFile)) { File.Delete(jsonFile); }
                 if (File.Exists(xmlFile)) { File.Delete(xmlFile); }
                 if (File.Exists(ymlFile)) { File.Delete(ymlFile); }
@@ -71,6 +73,7 @@ namespace EnumRun.Cmdlet
                 if (LogsPath != null) { Item.Config.LogsPath = this.LogsPath; }
                 if (OutputPath != null) { Item.Config.OutputPath = this.OutputPath; }
                 if (DebugMode != null) { Item.Config.DebugMode = (bool)this.DebugMode; }
+                if (SingleRun != null) { Item.Config.SingleRun = (bool)this.SingleRun; }
                 if (Ranges != null) { Item.Config.Ranges = new List<Range>(Ranges); }
                 if (Languages != null) { Item.Config.Languages = new List<Language>(Languages); }
             }

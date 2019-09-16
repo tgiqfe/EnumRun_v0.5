@@ -148,33 +148,33 @@ namespace EnumRun
 
             //  ドメイン参加済みPCのみ ro ワークグループPCのみ
             if (
-                (CheckOption(EnumRunOption.DomainPCOnly) && !CheckOption(EnumRunOption.WorkgroupPCOnly) && !Functions.IsDomainMachine()) ||
-                (!CheckOption(EnumRunOption.DomainPCOnly) && CheckOption(EnumRunOption.WorkgroupPCOnly) && Functions.IsDomainMachine()))
+                (CheckOption(EnumRunOption.DomainPCOnly) && !CheckOption(EnumRunOption.WorkgroupPCOnly) && !Function.IsDomainMachine()) ||
+                (!CheckOption(EnumRunOption.DomainPCOnly) && CheckOption(EnumRunOption.WorkgroupPCOnly) && Function.IsDomainMachine()))
             {
                 return;
             }
 
             //  システムアカウントのみ
-            if (CheckOption(EnumRunOption.SystemAccountOnly) && !Functions.IsSystemAccount())
+            if (CheckOption(EnumRunOption.SystemAccountOnly) && !Function.IsSystemAccount())
             {
                 return;
             }
 
             //  ドメインユーザーのみ or ローカルユーザーのみ
-            if ((CheckOption(EnumRunOption.DomainUserOnly) && !CheckOption(EnumRunOption.LocalUserOnly) && !Functions.IsDomainUser()) ||
-                (!CheckOption(EnumRunOption.DomainUserOnly) && CheckOption(EnumRunOption.LocalUserOnly) && Functions.IsDomainUser()))
+            if ((CheckOption(EnumRunOption.DomainUserOnly) && !CheckOption(EnumRunOption.LocalUserOnly) && !Function.IsDomainUser()) ||
+                (!CheckOption(EnumRunOption.DomainUserOnly) && CheckOption(EnumRunOption.LocalUserOnly) && Function.IsDomainUser()))
             {
                 return;
             }
 
             //  デフォルトゲートウェイとの通信可否を確認
-            if (CheckOption(EnumRunOption.DGReachableOnly) && !Functions.IsDefaultGatewayReachable())
+            if (CheckOption(EnumRunOption.DGReachableOnly) && !Function.IsDefaultGatewayReachable())
             {
                 return;
             }
 
             //  管理者として実行しているかどうかの確認
-            if (CheckOption(EnumRunOption.TrustedOnly) && !Functions.IsRunAdministrator())
+            if (CheckOption(EnumRunOption.TrustedOnly) && !Function.IsRunAdministrator())
             {
                 return;
             }
@@ -214,7 +214,7 @@ namespace EnumRun
         private async Task ProcessThreadAndOutput()
         {
             string outputFile = 
-                Functions.CreateOutputFileName(Item.Config.OutputPath, Path.GetFileNameWithoutExtension(File));
+                Function.CreateOutputFileName(Item.Config.OutputPath, Path.GetFileNameWithoutExtension(File));
             if (!Directory.Exists(Item.Config.OutputPath))
             {
                 Directory.CreateDirectory(Item.Config.OutputPath);
