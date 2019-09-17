@@ -23,7 +23,6 @@ namespace EnumRun
         public const string CONFIG_XML = "Config.xml";
         public const string CONFIG_YML = "Config.yml";
 
-
         //  設定ファイルから読み込んだパラメータ
         public static EnumRunConfig Config = null;
 
