@@ -13,8 +13,8 @@ namespace EnumRun
     {
         //  静的パラメータ
         public const string APPLICATION_NAME = "EnumRun";
-        public readonly static string WORK_DIR = Path.Combine(
-            Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"), APPLICATION_NAME);
+        //public readonly static string WORK_DIR = Path.Combine(
+        //    Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"), APPLICATION_NAME);
         //public readonly static string TEMP_DIR = Path.Combine(
         //    Environment.ExpandEnvironmentVariables("%TEMP%"), APPLICATION_NAME);
 

@@ -65,6 +65,7 @@ namespace EnumRun
                 Directory.CreateDirectory(tempDir);
             }
             string sessionFile = Path.Combine(tempDir, Item.SESSION_FILE);
+
             Dictionary<string, BootAndLogonSession> sessionData =
                 DataSerializer.Deserialize<Dictionary<string, BootAndLogonSession>>(sessionFile);
             if (sessionData == null)

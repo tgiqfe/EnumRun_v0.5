@@ -18,14 +18,17 @@ namespace EnumRun
         public List<Range> Ranges { get; set; }
         public List<Language> Languages { get; set; }
 
+        private string _workDir = null;
+
         public EnumRunConfig() { }
         public EnumRunConfig(bool loadDefault)
         {
+            _workDir = Function.GetWorkDir();
             if (loadDefault)
             {
-                this.FilesPath = Path.Combine(Item.WORK_DIR, "Files");
-                this.LogsPath = Path.Combine(Item.WORK_DIR, "Logs");
-                this.OutputPath = Path.Combine(Item.WORK_DIR, "Output");
+                this.FilesPath = Path.Combine(_workDir, "Files");
+                this.LogsPath = Path.Combine(_workDir, "Logs");
+                this.OutputPath = Path.Combine(_workDir, "Output");
                 this.DebugMode = false;
                 this.RunOnce = false;
                 this.Ranges = DefaultRangeSettings.Create();
@@ -39,11 +42,12 @@ namespace EnumRun
         /// <returns>読み込んEnumRunConfigインスタンス</returns>
         public static EnumRunConfig Load()
         {
+            string workDir = Function.GetWorkDir();
             string fileName = new string[]
             {
-                Path.Combine(Item.WORK_DIR, Item.CONFIG_JSON),
-                Path.Combine(Item.WORK_DIR, Item.CONFIG_XML),
-                Path.Combine(Item.WORK_DIR, Item.CONFIG_YML)
+                Path.Combine(workDir, Item.CONFIG_JSON),
+                Path.Combine(workDir, Item.CONFIG_XML),
+                Path.Combine(workDir, Item.CONFIG_YML)
             }.FirstOrDefault(x => File.Exists(x));
             return string.IsNullOrEmpty(fileName) || !File.Exists(fileName) ?
                 new EnumRunConfig(true) :
@@ -57,19 +61,19 @@ namespace EnumRun
         {
             string fileName = new string[]
             {
-                Path.Combine(Item.WORK_DIR, Item.CONFIG_JSON),
-                Path.Combine(Item.WORK_DIR, Item.CONFIG_XML),
-                Path.Combine(Item.WORK_DIR, Item.CONFIG_YML)
+                Path.Combine(_workDir, Item.CONFIG_JSON),
+                Path.Combine(_workDir, Item.CONFIG_XML),
+                Path.Combine(_workDir, Item.CONFIG_YML)
             }.FirstOrDefault(x => File.Exists(x));
 
             if (fileName == null)
             {
                 //  デフォルトでは C:\ProgramData\EnumRun\Config.json
-                fileName = Path.Combine(Item.WORK_DIR, "Config.json");
+                fileName = Path.Combine(_workDir, "Config.json");
             }
-            if (!Directory.Exists(Item.WORK_DIR))
+            if (!Directory.Exists(_workDir))
             {
-                Directory.CreateDirectory(Item.WORK_DIR);
+                Directory.CreateDirectory(_workDir);
             }
             DataSerializer.Serialize<EnumRunConfig>(this, fileName);
         }

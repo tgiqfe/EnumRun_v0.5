@@ -43,9 +43,10 @@ namespace EnumRun.Cmdlet
             //  データタイプ指定
             if (DataType != null)
             {
-                string jsonFile = Path.Combine(Item.WORK_DIR, Item.CONFIG_JSON);
-                string xmlFile = Path.Combine(Item.WORK_DIR, Item.CONFIG_XML);
-                string ymlFile = Path.Combine(Item.WORK_DIR, Item.CONFIG_YML);
+                string workDir = Function.GetWorkDir();
+                string jsonFile = Path.Combine(workDir, Item.CONFIG_JSON);
+                string xmlFile = Path.Combine(workDir, Item.CONFIG_XML);
+                string ymlFile = Path.Combine(workDir, Item.CONFIG_YML);
                 if (File.Exists(jsonFile)) { File.Delete(jsonFile); }
                 if (File.Exists(xmlFile)) { File.Delete(xmlFile); }
                 if (File.Exists(ymlFile)) { File.Delete(ymlFile); }
