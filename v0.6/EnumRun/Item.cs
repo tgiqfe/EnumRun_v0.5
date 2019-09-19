@@ -15,8 +15,8 @@ namespace EnumRun
         public const string APPLICATION_NAME = "EnumRun";
         public readonly static string WORK_DIR = Path.Combine(
             Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"), APPLICATION_NAME);
-        public readonly static string TEMP_DIR = Path.Combine(
-            Environment.ExpandEnvironmentVariables("%TEMP%"), APPLICATION_NAME);
+        //public readonly static string TEMP_DIR = Path.Combine(
+        //    Environment.ExpandEnvironmentVariables("%TEMP%"), APPLICATION_NAME);
 
         //  設定ファイル情報
         public static EnumRunConfig Config = null;

@@ -58,11 +58,13 @@ namespace EnumRun
             BootAndLogonSession session = new BootAndLogonSession(processName);
 
             //  前回セッション情報を確認
-            if (!Directory.Exists(Item.TEMP_DIR))
+            string tempDir = Path.Combine(
+                Environment.ExpandEnvironmentVariables("%TEMP%"), Item.APPLICATION_NAME);
+            if (!Directory.Exists(tempDir))
             {
-                Directory.CreateDirectory(Item.TEMP_DIR);
+                Directory.CreateDirectory(tempDir);
             }
-            string sessionFile = Path.Combine(Item.TEMP_DIR, Item.SESSION_FILE);
+            string sessionFile = Path.Combine(tempDir, Item.SESSION_FILE);
             Dictionary<string, BootAndLogonSession> sessionData =
                 DataSerializer.Deserialize<Dictionary<string, BootAndLogonSession>>(sessionFile);
             if (sessionData == null)
