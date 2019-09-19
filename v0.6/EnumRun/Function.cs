@@ -29,18 +29,28 @@ namespace EnumRun
                 Item.Config.LogsPath,
                 string.Format("{0}_{1}.log", processName, DateTime.Now.ToString("yyyyMMdd")));
 
-            LoggingConfiguration conf = new LoggingConfiguration();
-            FileTarget file = new FileTarget("file");
+            //  ファイル出力先設定
+            FileTarget file = new FileTarget("File");
             file.Encoding = Encoding.GetEncoding("Shift_JIS");
-            file.Layout = "[${longdate}][${uppercase:${level}}]]${windows-identity}] ${message}";
+            file.Layout = "[${longdate}][${windows-identity}][${uppercase:${level}}] ${message}";
             file.FileName = logPath;
+
+            //  コンソール出力設定
+            ConsoleTarget console = new ConsoleTarget("Console");
+            console.Layout = "[${longdate}][${windows-identity}][${uppercase:${level}}] ${message}";
+
+            LoggingConfiguration conf = new LoggingConfiguration();
             conf.AddTarget(file);
-            conf.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, file));
+            conf.AddTarget(console);
             if (Item.Config.DebugMode)
             {
                 conf.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, file));
+                conf.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, console));
             }
-
+            else
+            {
+                conf.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, file));
+            }
             LogManager.Configuration = conf;
             Logger logger = LogManager.GetCurrentClassLogger();
 

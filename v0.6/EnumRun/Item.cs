@@ -18,9 +18,10 @@ namespace EnumRun
         //public readonly static string TEMP_DIR = Path.Combine(
         //    Environment.ExpandEnvironmentVariables("%TEMP%"), APPLICATION_NAME);
 
-        //  設定ファイル情報
+        //  複数オブジェクトからアクセスする予定のあるパラメータ
         public static EnumRunConfig Config = null;
         public static Logger Logger = null;
+        public static DateTime StartTime;
 
         //  ファイル名関連
         public const string SESSION_FILE = "session.json";

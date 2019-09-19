@@ -16,6 +16,7 @@ namespace EnumRun.Cmdlet
 
         protected override void BeginProcessing()
         {
+            Item.StartTime = DateTime.Now;
             Item.Config = EnumRunConfig.Load();
             Item.Logger = Function.SetLogger(ProcessName);
         }
@@ -24,7 +25,7 @@ namespace EnumRun.Cmdlet
         {
             if (Item.Config.RunOnce && !BootAndLogonSession.Check(ProcessName))
             {
-                Item.Logger.Warn("RunOnce:有効 / 2回目以降の為、終了");
+                Item.Logger.Warn("RunOnce:true 2回目以降の為、終了");
                 return;
             }
 
@@ -48,6 +49,7 @@ namespace EnumRun.Cmdlet
                 }
             }
 
+            Item.Logger.Debug("所要時間(ミリ秒):{0}", (DateTime.Now - Item.StartTime).Milliseconds);
             Item.Logger.Debug("終了 {0}", ProcessName);
         }
     }

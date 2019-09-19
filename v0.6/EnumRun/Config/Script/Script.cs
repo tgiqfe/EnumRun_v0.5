@@ -28,20 +28,11 @@ namespace EnumRun
                     this._Lang = Item.Config.Languages.FirstOrDefault(x =>
                         x.Extensions.Any(y =>
                             y.Equals(extension, StringComparison.OrdinalIgnoreCase)));
-                    /*
-                    this._Lang = Item.Config.Languages.FirstOrDefault(x =>
-                        x.Value.Extensions.Any(y =>
-                            y.Equals(extension, StringComparison.OrdinalIgnoreCase))).Value;
-                    */
                 }
                 return _Lang == null ? "" : _Lang.ToString();
             }
             set
             {
-                /*
-                this._Lang = Item.Config.Languages.FirstOrDefault(x =>
-                    x.Value.Name.Equals(value, StringComparison.OrdinalIgnoreCase)).Value;
-                */
                 this._Lang = Item.Config.Languages.FirstOrDefault(x =>
                     x.Name.Equals(value, StringComparison.OrdinalIgnoreCase));
             }
@@ -144,19 +135,29 @@ namespace EnumRun
         public void Process()
         {
             //  実行対象外
-            if (CheckOption(EnumRunOption.NoRun)) { return; }
+            if (CheckOption(EnumRunOption.NoRun))
+            {
+                Item.Logger.Info("{0} / n:{1} 実行対象外", Name, true);
+                return;
+            }
 
             //  ドメイン参加済みPCのみ ro ワークグループPCのみ
             if (
                 (CheckOption(EnumRunOption.DomainPCOnly) && !CheckOption(EnumRunOption.WorkgroupPCOnly) && !Function.IsDomainMachine()) ||
                 (!CheckOption(EnumRunOption.DomainPCOnly) && CheckOption(EnumRunOption.WorkgroupPCOnly) && Function.IsDomainMachine()))
             {
+                Item.Logger.Info("{0} / m:{1} k:{2} ドメイン参加⇒{3}",
+                    Name,
+                    CheckOption(EnumRunOption.DomainPCOnly),
+                    CheckOption(EnumRunOption.WorkgroupPCOnly),
+                    Function.IsDomainMachine());
                 return;
             }
 
             //  システムアカウントのみ
             if (CheckOption(EnumRunOption.SystemAccountOnly) && !Function.IsSystemAccount())
             {
+                Item.Logger.Info("{0} / s:{1} システムアカウントのみ", Name, true);
                 return;
             }
 
@@ -164,32 +165,52 @@ namespace EnumRun
             if ((CheckOption(EnumRunOption.DomainUserOnly) && !CheckOption(EnumRunOption.LocalUserOnly) && !Function.IsDomainUser()) ||
                 (!CheckOption(EnumRunOption.DomainUserOnly) && CheckOption(EnumRunOption.LocalUserOnly) && Function.IsDomainUser()))
             {
+                Item.Logger.Info("{0} / d:{1} l:{2} ドメインユーザー⇒{3}",
+                    Name,
+                    CheckOption(EnumRunOption.DomainUserOnly),
+                    CheckOption(EnumRunOption.LocalUserOnly),
+                    Function.IsDomainUser());
                 return;
             }
 
             //  デフォルトゲートウェイとの通信可否を確認
             if (CheckOption(EnumRunOption.DGReachableOnly) && !Function.IsDefaultGatewayReachable())
             {
+                Item.Logger.Info("{0} / p:{1} DG導通⇒{2}", Name, true, false);
                 return;
             }
 
             //  管理者として実行しているかどうかの確認
             if (CheckOption(EnumRunOption.TrustedOnly) && !Function.IsRunAdministrator())
             {
+                Item.Logger.Info("{0} / t:{1} 管理者実行⇒{2}", Name, true, false);
                 return;
             }
 
             //  実行前待機
-            if (BeforeTime > 0) { Thread.Sleep(BeforeTime * 1000); }
+            if (BeforeTime > 0)
+            {
+                Item.Logger.Info("{0} / 〇r:{1} 実行前待機", Name, BeforeTime);
+                Thread.Sleep(BeforeTime * 1000);
+            }
 
             //  プロセス開始
+            Item.Logger.Info("{0} 実行", Name);
             Task task = CheckOption(EnumRunOption.Output) ?
                 ProcessThreadAndOutput() :
                 ProcessThread();
-            if (CheckOption(EnumRunOption.WaitForExit)) { task.Wait(); }
+            if (CheckOption(EnumRunOption.WaitForExit))
+            {
+                Item.Logger.Info("{0} / w:{1} 終了待ち", Name, true);
+                task.Wait();
+            }
 
             //  実行後待機
-            if (AfterTime > 0) { Thread.Sleep(AfterTime * 1000); }
+            if (AfterTime > 0)
+            {
+                Item.Logger.Info("{0} / r〇:{1} 実行後待機", Name, AfterTime);
+                Thread.Sleep(AfterTime * 1000);
+            }
         }
 
         /// <summary>
@@ -213,8 +234,10 @@ namespace EnumRun
         }
         private async Task ProcessThreadAndOutput()
         {
-            string outputFile = 
+            string outputFile =
                 Function.CreateOutputFileName(Item.Config.OutputPath, Path.GetFileNameWithoutExtension(File));
+            Item.Logger.Info("{0} / o:{1} 標準出力リダイレクト先⇒{2}", Name, true, outputFile);
+
             if (!Directory.Exists(Item.Config.OutputPath))
             {
                 Directory.CreateDirectory(Item.Config.OutputPath);
@@ -240,7 +263,5 @@ namespace EnumRun
                 }
             });
         }
-
-
     }
 }
