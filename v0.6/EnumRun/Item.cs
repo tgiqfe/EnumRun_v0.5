@@ -18,7 +18,6 @@ namespace EnumRun
         public readonly static string TEMP_DIR = Path.Combine(
             Environment.ExpandEnvironmentVariables("%TEMP%"), APPLICATION_NAME);
 
-
         //  設定ファイル情報
         public static EnumRunConfig Config = null;
         public static Logger Logger = null;

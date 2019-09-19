@@ -149,6 +149,7 @@ namespace EnumRun
                 sourceText + "_" + BitConverter.ToString(bytes).Replace("-", "") + ".txt");
         }
 
+        /*
         /// <summary>
         /// 現在実行している同名のプロセスが1回目かどうかを判定
         /// </summary>
@@ -189,5 +190,6 @@ namespace EnumRun
 
             return retVal;
         }
+        */
     }
 }
