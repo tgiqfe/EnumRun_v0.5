@@ -16,6 +16,7 @@ namespace EnumRun.Cmdlet
         protected override void BeginProcessing()
         {
             Item.Config = EnumRunConfig.Load();
+            Item.Logger = Function.SetLogger(ProcessName);
         }
 
         protected override void ProcessRecord()
@@ -25,7 +26,6 @@ namespace EnumRun.Cmdlet
                 //  同セッションで2回目以降の為、終了
                 return;
             }
-
             Range range = Item.Config.Ranges.FirstOrDefault(x => x.Name.Equals(ProcessName, StringComparison.OrdinalIgnoreCase));
             if (range != null)
             {

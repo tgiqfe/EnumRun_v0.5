@@ -10,11 +10,36 @@ using System.Security.Principal;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Security.Cryptography;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
 
 namespace EnumRun
 {
     class Function
     {
+        public static Logger SetLogger(string processName)
+        {
+            string logPath = System.IO.Path.Combine(
+                Item.Config.LogsPath,
+                string.Format("{0}_{1}.log", processName, DateTime.Now.ToString("yyyyMMdd")));
+
+            LoggingConfiguration conf = new LoggingConfiguration();
+            FileTarget file = new FileTarget("file");
+            file.Encoding = Encoding.GetEncoding("Shift_JIS");
+            file.Layout = "[${longdate}][${uppercase:${level}}]]${windows-identity}] ${message}";
+            file.FileName = logPath;
+            conf.AddTarget(file);
+            conf.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, file));
+
+            LogManager.Configuration = conf;
+            Logger logger = LogManager.GetCurrentClassLogger();
+
+            return logger;
+        }
+
+
+        /*
         public static string[] SplitComma(string sourceText)
         {
             return Regex.Split(sourceText, @",\s*");
@@ -28,6 +53,7 @@ namespace EnumRun
             }
             return textList.ToArray();
         }
+        */
 
         /// <summary>
         /// Active Directoryドメインの名前を取得
@@ -151,7 +177,7 @@ namespace EnumRun
             string sessionFile = Path.Combine(Item.TEMP_DIR, Item.SESSION_FILE);
             Dictionary<string, BootAndLogonSession> sessionData =
                 DataSerializer.Deserialize<Dictionary<string, BootAndLogonSession>>(sessionFile);
-            if(sessionData == null)
+            if (sessionData == null)
             {
                 sessionData = new Dictionary<string, BootAndLogonSession>();
             }

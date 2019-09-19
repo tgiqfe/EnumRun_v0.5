@@ -16,6 +16,7 @@ namespace EnumRun.Cmdlet
         protected override void BeginProcessing()
         {
             Item.Config = EnumRunConfig.Load();
+            Item.Logger = Function.SetLogger(ProcessName);
         }
 
         protected override void ProcessRecord()

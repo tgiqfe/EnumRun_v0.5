@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Reflection;
+using NLog;
 
 namespace EnumRun
 {
@@ -17,14 +18,16 @@ namespace EnumRun
         public readonly static string TEMP_DIR = Path.Combine(
             Environment.ExpandEnvironmentVariables("%TEMP%"), APPLICATION_NAME);
 
+
+        //  設定ファイル情報
+        public static EnumRunConfig Config = null;
+        public static Logger Logger = null;
+
         //  ファイル名関連
         public const string SESSION_FILE = "session.json";
         public const string CONFIG_JSON = "Config.json";
         public const string CONFIG_XML = "Config.xml";
         public const string CONFIG_YML = "Config.yml";
-
-        //  設定ファイルから読み込んだパラメータ
-        public static EnumRunConfig Config = null;
 
         //  データタイプ
         public const string JSON = "Json";
