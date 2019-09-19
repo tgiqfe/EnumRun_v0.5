@@ -14,7 +14,7 @@ namespace EnumRun
         public string LogsPath { get; set; }
         public string OutputPath { get; set; }
         public bool DebugMode { get; set; }
-        public bool SingleRun { get; set; }
+        public bool RunOnce { get; set; }
         public List<Range> Ranges { get; set; }
         public List<Language> Languages { get; set; }
 
@@ -27,7 +27,7 @@ namespace EnumRun
                 this.LogsPath = Path.Combine(Item.WORK_DIR, "Logs");
                 this.OutputPath = Path.Combine(Item.WORK_DIR, "Output");
                 this.DebugMode = false;
-                this.SingleRun = false;
+                this.RunOnce = false;
                 this.Ranges = DefaultRangeSettings.Create();
                 this.Languages = DefaultLanguageSetting.Create();
             }

@@ -20,7 +20,7 @@ namespace EnumRun.Cmdlet
         [Parameter]
         public bool? DebugMode { get; set; }
         [Parameter]
-        public bool? SingleRun { get; set; }
+        public bool? RunOnce { get; set; }
         [Parameter]
         public Range[] Ranges { get; set; }
         [Parameter]
@@ -73,7 +73,7 @@ namespace EnumRun.Cmdlet
                 if (LogsPath != null) { Item.Config.LogsPath = this.LogsPath; }
                 if (OutputPath != null) { Item.Config.OutputPath = this.OutputPath; }
                 if (DebugMode != null) { Item.Config.DebugMode = (bool)this.DebugMode; }
-                if (SingleRun != null) { Item.Config.SingleRun = (bool)this.SingleRun; }
+                if (RunOnce != null) { Item.Config.RunOnce = (bool)this.RunOnce; }
                 if (Ranges != null) { Item.Config.Ranges = new List<Range>(Ranges); }
                 if (Languages != null) { Item.Config.Languages = new List<Language>(Languages); }
             }

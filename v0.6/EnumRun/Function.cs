@@ -18,6 +18,11 @@ namespace EnumRun
 {
     class Function
     {
+        /// <summary>
+        /// ログ出力設定
+        /// </summary>
+        /// <param name="processName"></param>
+        /// <returns></returns>
         public static Logger SetLogger(string processName)
         {
             string logPath = System.IO.Path.Combine(
@@ -31,29 +36,16 @@ namespace EnumRun
             file.FileName = logPath;
             conf.AddTarget(file);
             conf.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, file));
+            if (Item.Config.DebugMode)
+            {
+                conf.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, file));
+            }
 
             LogManager.Configuration = conf;
             Logger logger = LogManager.GetCurrentClassLogger();
 
             return logger;
         }
-
-
-        /*
-        public static string[] SplitComma(string sourceText)
-        {
-            return Regex.Split(sourceText, @",\s*");
-        }
-        public static string[] SplitComma(string[] sourceTexts)
-        {
-            List<string> textList = new List<string>();
-            foreach (string text in sourceTexts)
-            {
-                textList.AddRange(SplitComma(text));
-            }
-            return textList.ToArray();
-        }
-        */
 
         /// <summary>
         /// Active Directoryドメインの名前を取得

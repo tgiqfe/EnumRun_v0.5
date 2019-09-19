@@ -22,11 +22,13 @@ namespace EnumRun.Cmdlet
 
         protected override void ProcessRecord()
         {
-            if (Item.Config.SingleRun && !Function.CheckBootAndLogonSession(ProcessName))
+            if (Item.Config.RunOnce && !Function.CheckBootAndLogonSession(ProcessName))
             {
-                //  同セッションで2回目以降の為、終了
+                Item.Logger.Warn("RunOnce有効で2回以上実行しようとした為、終了");
                 return;
             }
+
+            Item.Logger.Debug("開始 {0}", ProcessName);
 
             Range range = Item.Config.Ranges.FirstOrDefault(x => x.Name.Equals(ProcessName, StringComparison.OrdinalIgnoreCase));
             if (range != null)
@@ -45,6 +47,8 @@ namespace EnumRun.Cmdlet
                     }
                 }
             }
+
+            Item.Logger.Debug("終了 {0}", ProcessName);
         }
     }
 }
