@@ -23,7 +23,7 @@ namespace EnumRun.Cmdlet
         {
             if (Item.Config.RunOnce && !BootAndLogonSession.Check(ProcessName))
             {
-                Item.Logger.Warn("RunOnce有効で2回以上実行しようとした為、終了");
+                Item.Logger.Warn("RunOnce:有効 / 2回目以降の為、終了");
                 return;
             }
 

@@ -20,10 +20,12 @@ namespace EnumRun
 
         private string _workDir = null;
 
-        public EnumRunConfig() { }
-        public EnumRunConfig(bool loadDefault)
+        public EnumRunConfig()
         {
             _workDir = Function.GetWorkDir();
+        }
+        public EnumRunConfig(bool loadDefault) : this()
+        {
             if (loadDefault)
             {
                 this.FilesPath = Path.Combine(_workDir, "Files");
