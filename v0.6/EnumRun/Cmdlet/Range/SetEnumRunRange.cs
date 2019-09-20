@@ -62,7 +62,7 @@ namespace EnumRun.Cmdlet
                     }
                 }
             }
-            Item.Config.Save();
+            Item.Config.Save(Path);
         }
     }
 }

@@ -39,7 +39,7 @@ namespace EnumRun.Cmdlet
                     Item.Config.Ranges.Remove(range);
                 }
             }
-            Item.Config.Save();
+            Item.Config.Save(Path);
         }
     }
 }

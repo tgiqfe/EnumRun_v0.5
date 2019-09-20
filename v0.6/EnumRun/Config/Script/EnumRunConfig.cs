@@ -56,7 +56,7 @@ namespace EnumRun
         /// <summary>
         /// 設定を保存
         /// </summary>
-        public void Save() { Save(null); }
+        //public void Save() { Save(null); }
         public void Save(string confFile)
         {
             if (confFile == null)

@@ -39,7 +39,7 @@ namespace EnumRun.Cmdlet
                     Item.Config.Languages.Remove(lang);
                 }
             }
-            Item.Config.Save();
+            Item.Config.Save(Path);
         }
     }
 }
