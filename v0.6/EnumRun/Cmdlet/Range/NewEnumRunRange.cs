@@ -17,10 +17,12 @@ namespace EnumRun.Cmdlet
         [Parameter(Mandatory = true, Position = 2)]
         public int EndNumber { get; set; }
 
+        /*
         protected override void BeginProcessing()
         {
             Item.Config = EnumRunConfig.Load();
         }
+        */
 
         protected override void ProcessRecord()
         {

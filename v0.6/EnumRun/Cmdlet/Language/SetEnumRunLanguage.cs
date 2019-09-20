@@ -28,10 +28,12 @@ namespace EnumRun.Cmdlet
         public string ArgsMidWithArgs { get; set; }
         [Parameter]
         public string ArgsSuffix { get; set; }
+        [Parameter]
+        public string Path { get; set; }
 
         protected override void BeginProcessing()
         {
-            Item.Config = EnumRunConfig.Load();
+            Item.Config = EnumRunConfig.Load(Path);
         }
 
         protected override void ProcessRecord()

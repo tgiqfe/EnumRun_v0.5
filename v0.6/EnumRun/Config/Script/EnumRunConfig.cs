@@ -38,7 +38,7 @@ namespace EnumRun
         /// 設定ファイルからEnumRunConfigパラメータをロード
         /// </summary>
         /// <returns>読み込んEnumRunConfigインスタンス</returns>
-        public static EnumRunConfig Load() { return Load(null); }
+        //public static EnumRunConfig Load() { return Load(null); }
         public static EnumRunConfig Load(string confFile)
         {
             if (confFile == null)

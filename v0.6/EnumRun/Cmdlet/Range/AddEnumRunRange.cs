@@ -18,10 +18,12 @@ namespace EnumRun.Cmdlet
         public int StartNumber { get; set; }
         [Parameter(Position = 2)]
         public int EndNumber { get; set; }
+        [Parameter]
+        public string Path { get; set; }
 
         protected override void BeginProcessing()
         {
-            Item.Config = EnumRunConfig.Load();
+            Item.Config = EnumRunConfig.Load(Path);
         }
 
         protected override void ProcessRecord()

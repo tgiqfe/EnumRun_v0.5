@@ -12,10 +12,12 @@ namespace EnumRun.Cmdlet
     {
         [Parameter(Position = 0)]
         public string Name { get; set; }
+        [Parameter]
+        public string Path { get; set; }
 
         protected override void BeginProcessing()
         {
-            Item.Config = EnumRunConfig.Load();
+            Item.Config = EnumRunConfig.Load(Path);
         }
 
         protected override void ProcessRecord()

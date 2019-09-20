@@ -13,10 +13,13 @@ namespace EnumRun.Cmdlet
     {
         const string ProcessName = "LogonScript";
 
+        [Parameter(Position = 0)]
+        public string Path { get; set; }
+
         protected override void BeginProcessing()
         {
             Item.StartTime = DateTime.Now;
-            Item.Config = EnumRunConfig.Load();
+            Item.Config = EnumRunConfig.Load(Path);
             Item.Logger = Function.SetLogger(ProcessName);
         }
 
