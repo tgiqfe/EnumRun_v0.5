@@ -63,7 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BootAndLogonSession.cs" />
-    <Compile Include="Cmdlet\Config\ConvertEnumRunConfig.cs" />
     <Compile Include="Cmdlet\Range\NewEnumRunRange.cs" />
     <Compile Include="Cmdlet\Range\GetEnumRunRange.cs" />
     <Compile Include="Cmdlet\Language\GetEnumRunLanguage.cs" />

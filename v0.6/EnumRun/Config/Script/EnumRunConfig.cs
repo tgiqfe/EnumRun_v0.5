@@ -21,16 +21,6 @@ namespace EnumRun
         public EnumRunConfig() : this(false) { }
         public EnumRunConfig(bool loadDefault)
         {
-            /*
-            if (confFile == null)
-            {
-                confFile = Path.Combine(
-                    Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"),
-                    Item.APPLICATION_NAME,
-                    Item.CONFIG_JSON);
-            }
-            */
-
             if (loadDefault)
             {
                 string confDir = Environment.ExpandEnvironmentVariables("%PROGRAMDATA%");
@@ -58,15 +48,6 @@ namespace EnumRun
                     Item.APPLICATION_NAME,
                     Item.CONFIG_JSON);
             }
-            /*
-            string fileName = new string[]
-            {
-                Path.Combine(confDir, Item.CONFIG_JSON),
-                Path.Combine(confDir, Item.CONFIG_XML),
-                Path.Combine(confDir, Item.CONFIG_YML)
-            }.FirstOrDefault(x => File.Exists(x));
-            */
-
             return !File.Exists(confFile) ?
                 new EnumRunConfig(true) :
                 DataSerializer.Deserialize<EnumRunConfig>(confFile);
@@ -85,14 +66,6 @@ namespace EnumRun
                     Item.APPLICATION_NAME,
                     Item.CONFIG_JSON);
             }
-            /*
-            string fileName = new string[]
-            {
-                Path.Combine(confDir, Item.CONFIG_JSON),
-                Path.Combine(confDir, Item.CONFIG_XML),
-                Path.Combine(confDir, Item.CONFIG_YML)
-            }.FirstOrDefault(x => File.Exists(x));
-            */
             if (!Directory.Exists(Path.GetDirectoryName(confFile)))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(confFile));
