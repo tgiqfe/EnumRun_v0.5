@@ -20,13 +20,17 @@ namespace EnumRun
 
         public EnumRunConfig() : this(null, false) { }
         public EnumRunConfig(bool loadDefault) : this(null, loadDefault) { }
-        public EnumRunConfig(string confDir, bool loadDefault)
+        public EnumRunConfig(string confFile, bool loadDefault)
         {
-            if (confDir == null)
+            if (confFile == null)
             {
-                confDir = Path.Combine(Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"), Item.APPLICATION_NAME);
+                confFile = Path.Combine(
+                    Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"),
+                    Item.APPLICATION_NAME,
+                    Item.CONFIG_JSON);
             }
-            if (loadDefault)
+            string confDir = Path.GetDirectoryName(confFile);
+            if (loadDefault || !File.Exists(confFile))
             {
                 this.FilesPath = Path.Combine(confDir, "Files");
                 this.LogsPath = Path.Combine(confDir, "Logs");
@@ -42,54 +46,56 @@ namespace EnumRun
         /// 設定ファイルからEnumRunConfigパラメータをロード
         /// </summary>
         /// <returns>読み込んEnumRunConfigインスタンス</returns>
-        public static EnumRunConfig Load()
+        public static EnumRunConfig Load() { return Load(null); }
+        public static EnumRunConfig Load(string confFile)
         {
-            return Load(null);
-        }
-        public static EnumRunConfig Load(string confDir)
-        {
-            if (confDir == null)
+            if (confFile == null)
             {
-                confDir = Path.Combine(Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"), Item.APPLICATION_NAME);
+                confFile = Path.Combine(
+                    Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"),
+                    Item.APPLICATION_NAME,
+                    Item.CONFIG_JSON);
             }
+            /*
             string fileName = new string[]
             {
                 Path.Combine(confDir, Item.CONFIG_JSON),
                 Path.Combine(confDir, Item.CONFIG_XML),
                 Path.Combine(confDir, Item.CONFIG_YML)
             }.FirstOrDefault(x => File.Exists(x));
-            return string.IsNullOrEmpty(fileName) || !File.Exists(fileName) ?
+            */
+
+            return !File.Exists(confFile) ?
                 new EnumRunConfig(true) :
-                DataSerializer.Deserialize<EnumRunConfig>(fileName);
+                DataSerializer.Deserialize<EnumRunConfig>(confFile);
         }
 
         /// <summary>
         /// 設定を保存
         /// </summary>
         public void Save() { Save(null); }
-        public void Save(string confDir)
+        public void Save(string confFile)
         {
-            if (confDir == null)
+            if (confFile == null)
             {
-                confDir = Path.Combine(Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"), Item.APPLICATION_NAME);
+                confFile = Path.Combine(
+                    Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"),
+                    Item.APPLICATION_NAME,
+                    Item.CONFIG_JSON);
             }
+            /*
             string fileName = new string[]
             {
                 Path.Combine(confDir, Item.CONFIG_JSON),
                 Path.Combine(confDir, Item.CONFIG_XML),
                 Path.Combine(confDir, Item.CONFIG_YML)
             }.FirstOrDefault(x => File.Exists(x));
-
-            if (fileName == null)
+            */
+            if (!Directory.Exists(Path.GetDirectoryName(confFile)))
             {
-                //  デフォルトでは C:\ProgramData\EnumRun\Config.json
-                fileName = Path.Combine(confDir, "Config.json");
+                Directory.CreateDirectory(Path.GetDirectoryName(confFile));
             }
-            if (!Directory.Exists(confDir))
-            {
-                Directory.CreateDirectory(confDir);
-            }
-            DataSerializer.Serialize<EnumRunConfig>(this, fileName);
+            DataSerializer.Serialize<EnumRunConfig>(this, confFile);
         }
 
 

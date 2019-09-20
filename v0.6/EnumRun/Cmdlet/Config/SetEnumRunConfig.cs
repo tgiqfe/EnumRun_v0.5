@@ -26,21 +26,24 @@ namespace EnumRun.Cmdlet
         [Parameter]
         public Language[] Languages { get; set; }
         [Parameter]
+        public string ConfigPath { get; set; }
+        [Parameter]
         public SwitchParameter DefaultSetting { get; set; }
-        [Parameter, ValidateSet(Item.JSON, Item.XML, Item.YML)]
-        public string DataType { get; set; }
+        //[Parameter, ValidateSet(Item.JSON, Item.XML, Item.YML)]
+        //public string DataType { get; set; }
 
         protected override void BeginProcessing()
         {
-            Item.Config = EnumRunConfig.Load();
+            Item.Config = EnumRunConfig.Load(ConfigPath);
 
-            DataType = new string[] { Item.JSON, Item.XML, Item.YML }.
-                FirstOrDefault(x => x.Equals(DataType, StringComparison.OrdinalIgnoreCase));
+            //DataType = new string[] { Item.JSON, Item.XML, Item.YML }.
+            //    FirstOrDefault(x => x.Equals(DataType, StringComparison.OrdinalIgnoreCase));
         }
 
         protected override void ProcessRecord()
         {
             //  データタイプ指定
+            /*
             if (DataType != null)
             {
                 string workDir = Path.Combine(
@@ -64,6 +67,8 @@ namespace EnumRun.Cmdlet
                         break;
                 }
             }
+            */
+
 
             if (DefaultSetting)
             {
@@ -79,7 +84,7 @@ namespace EnumRun.Cmdlet
                 if (Ranges != null) { Item.Config.Ranges = new List<Range>(Ranges); }
                 if (Languages != null) { Item.Config.Languages = new List<Language>(Languages); }
             }
-            Item.Config.Save();
+            Item.Config.Save(ConfigPath);
             WriteObject(Item.Config);
         }
     }
