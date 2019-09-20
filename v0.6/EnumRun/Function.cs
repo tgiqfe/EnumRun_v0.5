@@ -58,16 +58,6 @@ namespace EnumRun
         }
 
         /// <summary>
-        /// Workフォルダーを取得
-        /// </summary>
-        /// <returns></returns>
-        public static string GetWorkDir()
-        {
-            return Path.Combine(
-                Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"), Item.APPLICATION_NAME);
-        }
-
-        /// <summary>
         /// Active Directoryドメインの名前を取得
         /// </summary>
         private static string _domainName = null;

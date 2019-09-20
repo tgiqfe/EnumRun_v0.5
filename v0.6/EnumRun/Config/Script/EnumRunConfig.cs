@@ -18,19 +18,19 @@ namespace EnumRun
         public List<Range> Ranges { get; set; }
         public List<Language> Languages { get; set; }
 
-        private string _workDir = null;
-
-        public EnumRunConfig()
+        public EnumRunConfig() : this(null, false) { }
+        public EnumRunConfig(bool loadDefault) : this(null, loadDefault) { }
+        public EnumRunConfig(string confDir, bool loadDefault)
         {
-            _workDir = Function.GetWorkDir();
-        }
-        public EnumRunConfig(bool loadDefault) : this()
-        {
+            if (confDir == null)
+            {
+                confDir = Path.Combine(Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"), Item.APPLICATION_NAME);
+            }
             if (loadDefault)
             {
-                this.FilesPath = Path.Combine(_workDir, "Files");
-                this.LogsPath = Path.Combine(_workDir, "Logs");
-                this.OutputPath = Path.Combine(_workDir, "Output");
+                this.FilesPath = Path.Combine(confDir, "Files");
+                this.LogsPath = Path.Combine(confDir, "Logs");
+                this.OutputPath = Path.Combine(confDir, "Output");
                 this.DebugMode = false;
                 this.RunOnce = false;
                 this.Ranges = DefaultRangeSettings.Create();
@@ -44,12 +44,19 @@ namespace EnumRun
         /// <returns>読み込んEnumRunConfigインスタンス</returns>
         public static EnumRunConfig Load()
         {
-            string workDir = Function.GetWorkDir();
+            return Load(null);
+        }
+        public static EnumRunConfig Load(string confDir)
+        {
+            if (confDir == null)
+            {
+                confDir = Path.Combine(Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"), Item.APPLICATION_NAME);
+            }
             string fileName = new string[]
             {
-                Path.Combine(workDir, Item.CONFIG_JSON),
-                Path.Combine(workDir, Item.CONFIG_XML),
-                Path.Combine(workDir, Item.CONFIG_YML)
+                Path.Combine(confDir, Item.CONFIG_JSON),
+                Path.Combine(confDir, Item.CONFIG_XML),
+                Path.Combine(confDir, Item.CONFIG_YML)
             }.FirstOrDefault(x => File.Exists(x));
             return string.IsNullOrEmpty(fileName) || !File.Exists(fileName) ?
                 new EnumRunConfig(true) :
@@ -59,26 +66,32 @@ namespace EnumRun
         /// <summary>
         /// 設定を保存
         /// </summary>
-        public void Save()
+        public void Save() { Save(null); }
+        public void Save(string confDir)
         {
+            if (confDir == null)
+            {
+                confDir = Path.Combine(Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"), Item.APPLICATION_NAME);
+            }
             string fileName = new string[]
             {
-                Path.Combine(_workDir, Item.CONFIG_JSON),
-                Path.Combine(_workDir, Item.CONFIG_XML),
-                Path.Combine(_workDir, Item.CONFIG_YML)
+                Path.Combine(confDir, Item.CONFIG_JSON),
+                Path.Combine(confDir, Item.CONFIG_XML),
+                Path.Combine(confDir, Item.CONFIG_YML)
             }.FirstOrDefault(x => File.Exists(x));
 
             if (fileName == null)
             {
                 //  デフォルトでは C:\ProgramData\EnumRun\Config.json
-                fileName = Path.Combine(_workDir, "Config.json");
+                fileName = Path.Combine(confDir, "Config.json");
             }
-            if (!Directory.Exists(_workDir))
+            if (!Directory.Exists(confDir))
             {
-                Directory.CreateDirectory(_workDir);
+                Directory.CreateDirectory(confDir);
             }
             DataSerializer.Serialize<EnumRunConfig>(this, fileName);
         }
+
 
         /// <summary>
         /// 一致する名前のLanguage配列を取得

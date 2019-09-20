@@ -43,7 +43,8 @@ namespace EnumRun.Cmdlet
             //  データタイプ指定
             if (DataType != null)
             {
-                string workDir = Function.GetWorkDir();
+                string workDir = Path.Combine(
+                    Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"), Item.APPLICATION_NAME);
                 string jsonFile = Path.Combine(workDir, Item.CONFIG_JSON);
                 string xmlFile = Path.Combine(workDir, Item.CONFIG_XML);
                 string ymlFile = Path.Combine(workDir, Item.CONFIG_YML);
