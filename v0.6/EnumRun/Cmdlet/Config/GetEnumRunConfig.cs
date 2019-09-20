@@ -10,9 +10,12 @@ namespace EnumRun.Cmdlet
     [Cmdlet(VerbsCommon.Get, "EnumRunConfig")]
     public class GetEnumRunConfig : PSCmdlet
     {
+        [Parameter]
+        public string ConfigPath { get; set; }
+
         protected override void BeginProcessing()
         {
-            Item.Config = EnumRunConfig.Load();
+            Item.Config = EnumRunConfig.Load(ConfigPath);
         }
 
         protected override void ProcessRecord()

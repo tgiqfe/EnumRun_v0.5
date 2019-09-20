@@ -18,10 +18,10 @@ namespace EnumRun
         public List<Range> Ranges { get; set; }
         public List<Language> Languages { get; set; }
 
-        public EnumRunConfig() : this(null, false) { }
-        public EnumRunConfig(bool loadDefault) : this(null, loadDefault) { }
-        public EnumRunConfig(string confFile, bool loadDefault)
+        public EnumRunConfig() : this(false) { }
+        public EnumRunConfig(bool loadDefault)
         {
+            /*
             if (confFile == null)
             {
                 confFile = Path.Combine(
@@ -29,9 +29,11 @@ namespace EnumRun
                     Item.APPLICATION_NAME,
                     Item.CONFIG_JSON);
             }
-            string confDir = Path.GetDirectoryName(confFile);
-            if (loadDefault || !File.Exists(confFile))
+            */
+
+            if (loadDefault)
             {
+                string confDir = Environment.ExpandEnvironmentVariables("%PROGRAMDATA%");
                 this.FilesPath = Path.Combine(confDir, "Files");
                 this.LogsPath = Path.Combine(confDir, "Logs");
                 this.OutputPath = Path.Combine(confDir, "Output");

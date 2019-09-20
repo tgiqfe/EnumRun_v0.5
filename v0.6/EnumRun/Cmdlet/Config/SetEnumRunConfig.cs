@@ -29,15 +29,15 @@ namespace EnumRun.Cmdlet
         public string ConfigPath { get; set; }
         [Parameter]
         public SwitchParameter DefaultSetting { get; set; }
-        //[Parameter, ValidateSet(Item.JSON, Item.XML, Item.YML)]
-        //public string DataType { get; set; }
+        [Parameter, ValidateSet(Item.JSON, Item.XML, Item.YML)]
+        public string DataType { get; set; }
 
         protected override void BeginProcessing()
         {
             Item.Config = EnumRunConfig.Load(ConfigPath);
 
-            //DataType = new string[] { Item.JSON, Item.XML, Item.YML }.
-            //    FirstOrDefault(x => x.Equals(DataType, StringComparison.OrdinalIgnoreCase));
+            DataType = new string[] { Item.JSON, Item.XML, Item.YML }.
+                FirstOrDefault(x => x.Equals(DataType, StringComparison.OrdinalIgnoreCase));
         }
 
         protected override void ProcessRecord()
@@ -84,7 +84,26 @@ namespace EnumRun.Cmdlet
                 if (Ranges != null) { Item.Config.Ranges = new List<Range>(Ranges); }
                 if (Languages != null) { Item.Config.Languages = new List<Language>(Languages); }
             }
-            Item.Config.Save(ConfigPath);
+            if (DataType == null)
+            {
+                Item.Config.Save(ConfigPath);
+            }
+            else
+            {
+                string saveConfigPath = ConfigPath;
+                Dictionary<string, string> extensions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    { Item.JSON, ".json" }, { Item.XML, ".xml" },{ Item.YML, ".yml" }
+                };
+                if (saveConfigPath == null)
+                {
+                    saveConfigPath = Path.Combine(
+                        Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"), 
+                        Item.APPLICATION_NAME, 
+                        "Conf" + extensions[DataType]);
+                }
+                Item.Config.Save(saveConfigPath);
+            }
             WriteObject(Item.Config);
         }
     }
