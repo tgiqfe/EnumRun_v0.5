@@ -63,6 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BootAndLogonSession.cs" />
+    <Compile Include="Class\Serialize\DataSerializer.cs" />
+    <Compile Include="Class\Serialize\DataType.cs" />
+    <Compile Include="Class\Serialize\JSON.cs" />
+    <Compile Include="Class\Serialize\SerializableDictionary.cs" />
+    <Compile Include="Class\Serialize\XML.cs" />
+    <Compile Include="Class\Serialize\YML.cs" />
     <Compile Include="Cmdlet\Range\NewEnumRunRange.cs" />
     <Compile Include="Cmdlet\Range\GetEnumRunRange.cs" />
     <Compile Include="Cmdlet\Language\GetEnumRunLanguage.cs" />
@@ -80,25 +86,23 @@
     <Compile Include="Cmdlet\Config\SetEnumRunConfig.cs" />
     <Compile Include="Cmdlet\Range\RemoveEnumRunRange.cs" />
     <Compile Include="Cmdlet\Range\SetEnumRunRange.cs" />
-    <Compile Include="Config\Script\DefaultLanguageSetting.cs" />
-    <Compile Include="Config\Script\EnumRunConfig.cs" />
-    <Compile Include="Config\Script\DefaultRangeSettings.cs" />
-    <Compile Include="Config\Script\EnumRunOption.cs" />
+    <Compile Include="Class\Script\DefaultLanguageSetting.cs" />
+    <Compile Include="Class\Script\EnumRunConfig.cs" />
+    <Compile Include="Class\Script\DefaultRangeSettings.cs" />
+    <Compile Include="Class\Script\EnumRunOption.cs" />
     <Compile Include="Function.cs" />
     <Compile Include="Item.cs" />
-    <Compile Include="Config\Script\Language.cs" />
+    <Compile Include="Class\Script\Language.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Config\Script\Range.cs" />
-    <Compile Include="Config\Script\Script.cs" />
-    <Compile Include="Config\Serialize\DataSerializer.cs" />
-    <Compile Include="Config\Serialize\SerializableDictionary.cs" />
+    <Compile Include="Class\Script\Range.cs" />
+    <Compile Include="Class\Script\Script.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Script\LogonScript.ps1" />
-    <None Include="Script\LogoffScript.ps1" />
-    <None Include="Script\ShutdownScript.ps1" />
-    <None Include="Script\StartupScript.ps1" />
+    <None Include="SampleScript\LogonScript.ps1" />
+    <None Include="SampleScript\LogoffScript.ps1" />
+    <None Include="SampleScript\ShutdownScript.ps1" />
+    <None Include="SampleScript\StartupScript.ps1" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

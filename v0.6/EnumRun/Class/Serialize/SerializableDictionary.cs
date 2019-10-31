@@ -2,10 +2,14 @@
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using System;
 
-namespace EnumRun
+namespace EnumRun.Serialize
 {
+    /// <summary>
+    /// XMLでDictionary型をシリアライズする為のクラス
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
     public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IXmlSerializable
     {
         public class KeyValue

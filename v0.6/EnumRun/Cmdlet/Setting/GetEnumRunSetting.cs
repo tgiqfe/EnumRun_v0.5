@@ -7,15 +7,15 @@ using System.Management.Automation;
 
 namespace EnumRun.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Get, "EnumRunConfig")]
-    public class GetEnumRunConfig : PSCmdlet
+    [Cmdlet(VerbsCommon.Get, "EnumRunSetting")]
+    public class GetEnumRunSetting : PSCmdlet
     {
-        [Parameter(Position = 0)]
-        public string Path { get; set; }
+        [Parameter(Position = 0), Alias("Path")]
+        public string SettingPath { get; set; }
 
         protected override void BeginProcessing()
         {
-            Item.Config = EnumRunConfig.Load(Path);
+            Item.Config = EnumRunConfig.Load(SettingPath);
         }
 
         protected override void ProcessRecord()

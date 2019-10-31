@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Management;
 using System.IO;
+using EnumRun.Serialize;
 
 namespace EnumRun
 {

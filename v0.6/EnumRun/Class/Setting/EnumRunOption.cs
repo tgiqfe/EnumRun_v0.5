@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace EnumRun
 {
     [Flags]
-    public enum EnumRunOption
+    public internal enum EnumRunOption
     {
         None = 0,                   //  オプション無し
         NoRun = 1,                  //  [n] 実行しない

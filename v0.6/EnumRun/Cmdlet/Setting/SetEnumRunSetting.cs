@@ -8,11 +8,11 @@ using System.IO;
 
 namespace EnumRun.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Set, "EnumRunConfig")]
-    public class SetEnumRunConfig : PSCmdlet
+    [Cmdlet(VerbsCommon.Set, "EnumRunSetting")]
+    public class SetEnumRunSetting : PSCmdlet
     {
-        [Parameter(Position = 0)]
-        public string Path { get; set; }
+        [Parameter(Position = 0), Alias("Path")]
+        public string SettingPath { get; set; }
         [Parameter]
         public string FilesPath { get; set; }
         [Parameter]
@@ -34,7 +34,7 @@ namespace EnumRun.Cmdlet
 
         protected override void BeginProcessing()
         {
-            Item.Config = EnumRunConfig.Load(Path);
+            Item.Config = EnumRunConfig.Load(SettingPath);
 
             DataType = new string[] { Item.JSON, Item.XML, Item.YML }.
                 FirstOrDefault(x => x.Equals(DataType, StringComparison.OrdinalIgnoreCase));
@@ -61,7 +61,7 @@ namespace EnumRun.Cmdlet
             //  データタイプ変更
             if (DataType == null)
             {
-                Item.Config.Save(Path);
+                Item.Config.Save(SettingPath);
             }
             else
             {
@@ -70,14 +70,14 @@ namespace EnumRun.Cmdlet
                     { Item.JSON, ".json" }, { Item.XML, ".xml" },{ Item.YML, ".yml" }
                 };
 
-                string saveConfigPath = Path == null ?
-                    System.IO.Path.Combine(
+                string saveConfigPath = SettingPath == null ?
+                    Path.Combine(
                         Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"),
                         Item.APPLICATION_NAME,
                         "Config" + extensions[DataType]) :
-                    System.IO.Path.Combine(
-                        System.IO.Path.GetDirectoryName(Path),
-                        System.IO.Path.GetFileNameWithoutExtension(Path) + extensions[DataType]);
+                    Path.Combine(
+                        Path.GetDirectoryName(SettingPath),
+                        Path.GetFileNameWithoutExtension(SettingPath) + extensions[DataType]);
                 Item.Config.Save(saveConfigPath);
             }
             WriteObject(Item.Config);
