@@ -95,6 +95,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Script\LogonScript.ps1" />
+    <None Include="Script\LogoffScript.ps1" />
+    <None Include="Script\ShutdownScript.ps1" />
+    <None Include="Script\StartupScript.ps1" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
