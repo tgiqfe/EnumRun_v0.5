@@ -34,7 +34,7 @@ namespace EnumRun.Cmdlet
 
         protected override void BeginProcessing()
         {
-            Item.Config = EnumRunConfig.Load(SettingPath);
+            Item.Config = EnumRunSetting.Load(SettingPath);
 
             DataType = new string[] { Item.JSON, Item.XML, Item.YML }.
                 FirstOrDefault(x => x.Equals(DataType, StringComparison.OrdinalIgnoreCase));
@@ -45,7 +45,7 @@ namespace EnumRun.Cmdlet
             //  パラメータ設定
             if (DefaultSetting)
             {
-                Item.Config = new EnumRunConfig(true);
+                Item.Config = new EnumRunSetting(true);
             }
             else
             {

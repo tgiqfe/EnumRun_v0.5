@@ -15,7 +15,7 @@ namespace EnumRun.Cmdlet
 
         protected override void BeginProcessing()
         {
-            Item.Config = EnumRunConfig.Load(SettingPath);
+            Item.Config = EnumRunSetting.Load(SettingPath);
         }
 
         protected override void ProcessRecord()

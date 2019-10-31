@@ -9,7 +9,7 @@ using EnumRun.Serialize;
 
 namespace EnumRun
 {
-    public class EnumRunConfig
+    public class EnumRunSetting
     {
         public string FilesPath { get; set; }
         public string LogsPath { get; set; }
@@ -19,8 +19,18 @@ namespace EnumRun
         public List<Range> Ranges { get; set; }
         public List<Language> Languages { get; set; }
 
-        public EnumRunConfig() : this(false) { }
-        public EnumRunConfig(bool loadDefault)
+        public EnumRunSetting()
+        {
+            this.FilesPath = Path.Combine(Item.DEFAULT_WORKDIR, "Files");
+            this.LogsPath = Path.Combine(Item.DEFAULT_WORKDIR, "Logs");
+            this.OutputPath = Path.Combine(Item.DEFAULT_WORKDIR, "Output");
+            this.DebugMode = false;
+            this.RunOnce = false;
+            this.Ranges = DefaultRangeSettings.Create();
+            this.Languages = DefaultLanguageSetting.Create();
+        }
+
+        public EnumRunSetting(bool loadDefault)
         {
             if (loadDefault)
             {
@@ -36,11 +46,10 @@ namespace EnumRun
         }
 
         /// <summary>
-        /// 設定ファイルからEnumRunConfigパラメータをロード
+        /// 設定ファイルからEnumRunSettingパラメータをロード
         /// </summary>
         /// <returns>読み込んEnumRunConfigインスタンス</returns>
-        //public static EnumRunConfig Load() { return Load(null); }
-        public static EnumRunConfig Load(string confFile)
+        public static EnumRunSetting Load(string confFile)
         {
             if (confFile == null)
             {
@@ -50,14 +59,13 @@ namespace EnumRun
                     Item.CONFIG_JSON);
             }
             return !File.Exists(confFile) ?
-                new EnumRunConfig(true) :
-                DataSerializer.Deserialize<EnumRunConfig>(confFile);
+                new EnumRunSetting(true) :
+                DataSerializer.Deserialize<EnumRunSetting>(confFile);
         }
 
         /// <summary>
         /// 設定を保存
         /// </summary>
-        //public void Save() { Save(null); }
         public void Save(string confFile)
         {
             if (confFile == null)
@@ -71,7 +79,7 @@ namespace EnumRun
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(confFile));
             }
-            DataSerializer.Serialize<EnumRunConfig>(this, confFile);
+            DataSerializer.Serialize<EnumRunSetting>(this, confFile);
         }
 
 

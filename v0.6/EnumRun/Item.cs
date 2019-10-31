@@ -13,17 +13,20 @@ namespace EnumRun
     {
         //  静的パラメータ
         public const string APPLICATION_NAME = "EnumRun";
+        public static readonly string DEFAULT_WORKDIR = Path.Combine(
+            Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"),
+            APPLICATION_NAME);
 
         //  複数オブジェクトからアクセスする予定のあるパラメータ
-        public static EnumRunConfig Config = null;
+        public static EnumRunSetting Config = null;
         public static Logger Logger = null;
         public static DateTime StartTime;
 
         //  ファイル名関連
         public const string SESSION_FILE = "session.json";
-        public const string CONFIG_JSON = "Config.json";
-        public const string CONFIG_XML = "Config.xml";
-        public const string CONFIG_YML = "Config.yml";
+        public const string CONFIG_JSON = "Setting.json";
+        public const string CONFIG_XML = "Setting.xml";
+        public const string CONFIG_YML = "Setting.yml";
 
         //  データタイプ
         public const string JSON = "Json";
