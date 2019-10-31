@@ -9,13 +9,15 @@ using NLog;
 
 namespace EnumRun
 {
-    class Item
+    internal class Item
     {
         //  静的パラメータ
         public const string APPLICATION_NAME = "EnumRun";
         public static readonly string DEFAULT_WORKDIR = Path.Combine(
             Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"),
             APPLICATION_NAME);
+        public static readonly string CURRENT_DIR = 
+            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
         //  複数オブジェクトからアクセスする予定のあるパラメータ
         public static EnumRunSetting Setting = null;

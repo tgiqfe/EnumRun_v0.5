@@ -37,9 +37,14 @@ namespace EnumRun.Cmdlet
 
         protected override void BeginProcessing()
         {
-            if (SettingPath == null)
+            //  設定ファイルの場所を探す優先度
+            //  1. アセンブリと同じ場所の setting.json
+            //  2. C:\ProgramData\EnumRun の setting.json
+            if (string.IsNullOrEmpty(SettingPath))
             {
-                SettingPath = Path.Combine(Item.DEFAULT_WORKDIR, Item.CONFIG_JSON);
+                string currentDirSetting = Path.Combine(Item.CURRENT_DIR, Item.CONFIG_JSON);
+                string programdataSetting = Path.Combine(Item.DEFAULT_WORKDIR, Item.CONFIG_JSON);
+                SettingPath = File.Exists(currentDirSetting) ? currentDirSetting : programdataSetting;
             }
             _setting = DataSerializer.Deserialize<EnumRunSetting>(SettingPath);
         }

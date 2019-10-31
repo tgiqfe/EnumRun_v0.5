@@ -30,6 +30,7 @@ namespace EnumRun
             this.Languages = DefaultLanguageSetting.Create();
         }
 
+        //  廃止予定
         public EnumRunSetting(bool loadDefault)
         {
             if (loadDefault)
@@ -45,6 +46,12 @@ namespace EnumRun
             }
         }
 
+
+
+
+
+
+        //  廃止予定
         /// <summary>
         /// 設定ファイルからEnumRunSettingパラメータをロード
         /// </summary>
@@ -63,6 +70,7 @@ namespace EnumRun
                 DataSerializer.Deserialize<EnumRunSetting>(confFile);
         }
 
+        //  廃止予定
         /// <summary>
         /// 設定を保存
         /// </summary>
