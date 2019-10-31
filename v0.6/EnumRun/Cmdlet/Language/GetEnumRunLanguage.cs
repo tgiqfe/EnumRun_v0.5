@@ -17,18 +17,18 @@ namespace EnumRun.Cmdlet
 
         protected override void BeginProcessing()
         {
-            Item.Config = EnumRunSetting.Load(Path);
+            Item.Setting = EnumRunSetting.Load(Path);
         }
 
         protected override void ProcessRecord()
         {
             if(Name == null)
             {
-                WriteObject(Item.Config.Languages);
+                WriteObject(Item.Setting.Languages);
             }
             else
             {
-                WriteObject(Item.Config.GetLanguage(Name));
+                WriteObject(Item.Setting.GetLanguage(Name));
             }
         }
     }

@@ -15,12 +15,12 @@ namespace EnumRun.Cmdlet
 
         protected override void BeginProcessing()
         {
-            Item.Config = EnumRunSetting.Load(SettingPath);
+            Item.Setting = EnumRunSetting.Load(SettingPath);
         }
 
         protected override void ProcessRecord()
         {
-            WriteObject(Item.Config);
+            WriteObject(Item.Setting);
         }
     }
 }

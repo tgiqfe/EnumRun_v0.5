@@ -26,7 +26,7 @@ namespace EnumRun
         public static Logger SetLogger(string processName)
         {
             string logPath = System.IO.Path.Combine(
-                Item.Config.LogsPath,
+                Item.Setting.LogsPath,
                 string.Format("{0}_{1}.log", processName, DateTime.Now.ToString("yyyyMMdd")));
 
             //  ファイル出力先設定
@@ -42,7 +42,7 @@ namespace EnumRun
             LoggingConfiguration conf = new LoggingConfiguration();
             conf.AddTarget(file);
             conf.AddTarget(console);
-            if (Item.Config.DebugMode)
+            if (Item.Setting.DebugMode)
             {
                 conf.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, file));
                 conf.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, console));

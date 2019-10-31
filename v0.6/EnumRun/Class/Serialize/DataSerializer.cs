@@ -19,11 +19,18 @@ namespace EnumRun.Serialize
         /// <returns></returns>
         public static T Deserialize<T>(string fileName) where T : class
         {
-            using (StreamReader sr = new StreamReader(fileName, Encoding.UTF8))
+            if (File.Exists(fileName))
             {
-                return Deserialize<T>(sr, Enum.TryParse(
-                    Path.GetExtension(fileName).TrimStart('.'), true, out DataType extension) ?
-                    extension : DataType.None);
+                using (StreamReader sr = new StreamReader(fileName, Encoding.UTF8))
+                {
+                    return Deserialize<T>(sr, Enum.TryParse(
+                        Path.GetExtension(fileName).TrimStart('.'), true, out DataType extension) ?
+                        extension : DataType.None);
+                }
+            }
+            else
+            {
+                return null;
             }
         }
 
@@ -36,9 +43,16 @@ namespace EnumRun.Serialize
         /// <returns></returns>
         public static T Deserialize<T>(string sourceText, DataType extension) where T : class
         {
-            using (StringReader sr = new StringReader(sourceText))
+            if (!string.IsNullOrEmpty(sourceText))
             {
-                return Deserialize<T>(sr, extension);
+                using (StringReader sr = new StringReader(sourceText))
+                {
+                    return Deserialize<T>(sr, extension);
+                }
+            }
+            else
+            {
+                return null;
             }
         }
 
@@ -118,17 +132,20 @@ namespace EnumRun.Serialize
         /// <param name="extension"></param>
         public static void Serialize<T>(object obj, TextWriter tw, DataType extension)
         {
-            switch (extension)
+            if (obj != null)
             {
-                case DataType.Json:
-                    JSON.Serialize<T>(obj, tw);
-                    break;
-                case DataType.Xml:
-                    XML.Serialize<T>(obj, tw);
-                    break;
-                case DataType.Yml:
-                    YML.Serialize<T>(obj, tw);
-                    break;
+                switch (extension)
+                {
+                    case DataType.Json:
+                        JSON.Serialize<T>(obj, tw);
+                        break;
+                    case DataType.Xml:
+                        XML.Serialize<T>(obj, tw);
+                        break;
+                    case DataType.Yml:
+                        YML.Serialize<T>(obj, tw);
+                        break;
+                }
             }
         }
 

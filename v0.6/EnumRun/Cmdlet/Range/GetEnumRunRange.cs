@@ -17,18 +17,18 @@ namespace EnumRun.Cmdlet
 
         protected override void BeginProcessing()
         {
-            Item.Config = EnumRunSetting.Load(Path);
+            Item.Setting = EnumRunSetting.Load(Path);
         }
 
         protected override void ProcessRecord()
         {
             if (Name == null)
             {
-                WriteObject(Item.Config.Ranges);
+                WriteObject(Item.Setting.Ranges);
             }
             else
             {
-                WriteObject(Item.Config.GetRange(Name));
+                WriteObject(Item.Setting.GetRange(Name));
             }
         }
     }

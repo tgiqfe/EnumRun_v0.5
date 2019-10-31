@@ -19,13 +19,13 @@ namespace EnumRun.Cmdlet
         protected override void BeginProcessing()
         {
             Item.StartTime = DateTime.Now;
-            Item.Config = EnumRunSetting.Load(SettingPath);
+            Item.Setting = EnumRunSetting.Load(SettingPath);
             Item.Logger = Function.SetLogger(ProcessName);
         }
 
         protected override void ProcessRecord()
         {
-            if (Item.Config.RunOnce && !BootAndLogonSession.Check(ProcessName))
+            if (Item.Setting.RunOnce && !BootAndLogonSession.Check(ProcessName))
             {
                 Item.Logger.Warn("RunOnce:true 2回目以降の為、終了");
                 return;
@@ -33,14 +33,14 @@ namespace EnumRun.Cmdlet
 
             Item.Logger.Debug("開始 {0}", ProcessName);
 
-            Range range = Item.Config.Ranges.FirstOrDefault(x => x.Name.Equals(ProcessName, StringComparison.OrdinalIgnoreCase));
+            Range range = Item.Setting.Ranges.FirstOrDefault(x => x.Name.Equals(ProcessName, StringComparison.OrdinalIgnoreCase));
             if (range != null)
             {
-                if (Directory.Exists(Item.Config.FilesPath))
+                if (Directory.Exists(Item.Setting.FilesPath))
                 {
                     //  スクリプトファイルの列挙
                     List<Script> scriptList = new List<Script>();
-                    foreach (string scriptFile in Directory.GetFiles(Item.Config.FilesPath))
+                    foreach (string scriptFile in Directory.GetFiles(Item.Setting.FilesPath))
                     {
                         Script script = new Script(scriptFile, range.StartNumber, range.EndNumber);
                         if (script.Enabled)

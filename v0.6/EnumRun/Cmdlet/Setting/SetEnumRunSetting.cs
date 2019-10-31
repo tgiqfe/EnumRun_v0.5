@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Management.Automation;
 using System.IO;
+using EnumRun.Serialize;
 
 namespace EnumRun.Cmdlet
 {
@@ -28,59 +29,56 @@ namespace EnumRun.Cmdlet
         [Parameter]
         public Language[] Languages { get; set; }
         [Parameter]
+        public SwitchParameter Clear { get; set; }
+        [Parameter]
         public SwitchParameter DefaultSetting { get; set; }
-        [Parameter, ValidateSet(Item.JSON, Item.XML, Item.YML)]
-        public string DataType { get; set; }
+
+        private EnumRunSetting _setting = null;
 
         protected override void BeginProcessing()
         {
-            Item.Config = EnumRunSetting.Load(SettingPath);
-
-            DataType = new string[] { Item.JSON, Item.XML, Item.YML }.
-                FirstOrDefault(x => x.Equals(DataType, StringComparison.OrdinalIgnoreCase));
+            if (SettingPath == null)
+            {
+                SettingPath = Path.Combine(Item.DEFAULT_WORKDIR, Item.CONFIG_JSON);
+            }
+            _setting = DataSerializer.Deserialize<EnumRunSetting>(SettingPath);
         }
 
         protected override void ProcessRecord()
         {
-            //  パラメータ設定
-            if (DefaultSetting)
+            if (_setting == null || Clear)
             {
-                Item.Config = new EnumRunSetting(true);
-            }
-            else
-            {
-                if (FilesPath != null) { Item.Config.FilesPath = this.FilesPath; }
-                if (LogsPath != null) { Item.Config.LogsPath = this.LogsPath; }
-                if (OutputPath != null) { Item.Config.OutputPath = this.OutputPath; }
-                if (DebugMode != null) { Item.Config.DebugMode = (bool)this.DebugMode; }
-                if (RunOnce != null) { Item.Config.RunOnce = (bool)this.RunOnce; }
-                if (Ranges != null) { Item.Config.Ranges = new List<Range>(Ranges); }
-                if (Languages != null) { Item.Config.Languages = new List<Language>(Languages); }
+                _setting = new EnumRunSetting();
             }
 
-            //  データタイプ変更
-            if (DataType == null)
-            {
-                Item.Config.Save(SettingPath);
-            }
-            else
-            {
-                Dictionary<string, string> extensions = new Dictionary<string, string>()
-                {
-                    { Item.JSON, ".json" }, { Item.XML, ".xml" },{ Item.YML, ".yml" }
-                };
+            //  スクリプトファイルの保存先
+            if (!string.IsNullOrEmpty(FilesPath)) { _setting.FilesPath = FilesPath; }
 
-                string saveConfigPath = SettingPath == null ?
-                    Path.Combine(
-                        Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"),
-                        Item.APPLICATION_NAME,
-                        "Config" + extensions[DataType]) :
-                    Path.Combine(
-                        Path.GetDirectoryName(SettingPath),
-                        Path.GetFileNameWithoutExtension(SettingPath) + extensions[DataType]);
-                Item.Config.Save(saveConfigPath);
+            //  ログ出力先
+            if (!string.IsNullOrEmpty(LogsPath)) { _setting.LogsPath = LogsPath; }
+
+            //  コンソール出力内容のリダイレクト先
+            if (!string.IsNullOrEmpty(OutputPath)) { _setting.OutputPath = OutputPath; }
+
+            //  デバッグモード
+            if (DebugMode != null) { _setting.DebugMode = (bool)DebugMode; }
+
+            //  1回だけ実行
+            if (RunOnce != null) { _setting.RunOnce = (bool)RunOnce; }
+
+            //  Range設定
+            if (Ranges != null && Ranges.Length > 0) { _setting.Ranges = new List<Range>(Ranges); }
+
+            //  Languages設定
+            if (Languages != null && Languages.Length > 0) { _setting.Languages = new List<Language>(Languages); }
+
+            if (!Directory.Exists(Path.GetDirectoryName(SettingPath)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(SettingPath));
             }
-            WriteObject(Item.Config);
+            DataSerializer.Serialize<EnumRunSetting>(_setting, SettingPath);
+
+            WriteObject(_setting);
         }
     }
 }

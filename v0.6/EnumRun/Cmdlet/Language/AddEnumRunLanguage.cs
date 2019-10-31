@@ -33,14 +33,14 @@ namespace EnumRun.Cmdlet
 
         protected override void BeginProcessing()
         {
-            Item.Config = EnumRunSetting.Load(Path);
+            Item.Setting = EnumRunSetting.Load(Path);
         }
 
         protected override void ProcessRecord()
         {
             if (Language == null && !string.IsNullOrEmpty(Name))
             {
-                Language[] langs = Item.Config.GetLanguage(Name);
+                Language[] langs = Item.Setting.GetLanguage(Name);
                 if (langs != null && langs.Length > 0)
                 {
                     //  すでに同じ名前のLanguageがある為、追加不可
@@ -49,7 +49,7 @@ namespace EnumRun.Cmdlet
                 else
                 {
                     //  名前を指定の場合は1つずつ追加
-                    Item.Config.Languages.Add(new Language()
+                    Item.Setting.Languages.Add(new Language()
                     {
                         Name = this.Name,
                         Extensions = this.Extensions,
@@ -66,18 +66,18 @@ namespace EnumRun.Cmdlet
             {
                 foreach (Language lang in Language)
                 {
-                    if(Item.Config.Languages.Any(x => x.Name.Equals(lang.Name, StringComparison.OrdinalIgnoreCase)))
+                    if(Item.Setting.Languages.Any(x => x.Name.Equals(lang.Name, StringComparison.OrdinalIgnoreCase)))
                     {
                         //  すでに同じ名前のLanguageがある為、追加不可
                         return;
                     }
                     else
                     {
-                        Item.Config.Languages.Add(lang);
+                        Item.Setting.Languages.Add(lang);
                     }
                 }
             }
-            Item.Config.Save(Path);
+            Item.Setting.Save(Path);
         }
     }
 }

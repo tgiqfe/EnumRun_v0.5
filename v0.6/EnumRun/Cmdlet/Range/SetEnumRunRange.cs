@@ -23,14 +23,14 @@ namespace EnumRun.Cmdlet
 
         protected override void BeginProcessing()
         {
-            Item.Config = EnumRunSetting.Load(Path);
+            Item.Setting = EnumRunSetting.Load(Path);
         }
 
         protected override void ProcessRecord()
         {
             if (Range == null && !string.IsNullOrEmpty(Name))
             {
-                Range[] ranges = Item.Config.GetRange(Name);
+                Range[] ranges = Item.Setting.GetRange(Name);
                 if(ranges != null && ranges.Length > 0)
                 {
                     foreach(Range range in ranges)
@@ -50,10 +50,10 @@ namespace EnumRun.Cmdlet
                 //  パイプラインで渡されたRangeと名前が一致している場合に上書き
                 foreach(Range range in Range)
                 {
-                    int index = Item.Config.Ranges.FindIndex(x => x.Name.Equals(range.Name, StringComparison.OrdinalIgnoreCase));
+                    int index = Item.Setting.Ranges.FindIndex(x => x.Name.Equals(range.Name, StringComparison.OrdinalIgnoreCase));
                     if(index >= 0)
                     {
-                        Item.Config.Ranges[index] = range;
+                        Item.Setting.Ranges[index] = range;
                     }
                     else
                     {
@@ -62,7 +62,7 @@ namespace EnumRun.Cmdlet
                     }
                 }
             }
-            Item.Config.Save(Path);
+            Item.Setting.Save(Path);
         }
     }
 }

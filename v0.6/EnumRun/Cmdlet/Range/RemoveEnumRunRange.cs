@@ -19,16 +19,16 @@ namespace EnumRun.Cmdlet
 
         protected override void BeginProcessing()
         {
-            Item.Config = EnumRunSetting.Load(Path);
+            Item.Setting = EnumRunSetting.Load(Path);
         }
 
         protected override void ProcessRecord()
         {
             if (Range == null && !string.IsNullOrEmpty(Name))
             {
-                foreach(Range range in Item.Config.GetRange(Name))
+                foreach(Range range in Item.Setting.GetRange(Name))
                 {
-                    Item.Config.Ranges.Remove(range);
+                    Item.Setting.Ranges.Remove(range);
                 }
             }
             else if (Range != null)
@@ -36,10 +36,10 @@ namespace EnumRun.Cmdlet
                 //  名前判定せず、インスタンスの中身が一致したら削除
                 foreach(Range range in Range)
                 {
-                    Item.Config.Ranges.Remove(range);
+                    Item.Setting.Ranges.Remove(range);
                 }
             }
-            Item.Config.Save(Path);
+            Item.Setting.Save(Path);
         }
     }
 }

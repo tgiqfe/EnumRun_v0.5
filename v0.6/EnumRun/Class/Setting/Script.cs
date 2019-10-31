@@ -22,10 +22,10 @@ namespace EnumRun
         {
             get
             {
-                if (this._Lang == null && Item.Config != null && !string.IsNullOrEmpty(this.File))
+                if (this._Lang == null && Item.Setting != null && !string.IsNullOrEmpty(this.File))
                 {
                     string extension = Path.GetExtension(File);
-                    this._Lang = Item.Config.Languages.FirstOrDefault(x =>
+                    this._Lang = Item.Setting.Languages.FirstOrDefault(x =>
                         x.Extensions.Any(y =>
                             y.Equals(extension, StringComparison.OrdinalIgnoreCase)));
                 }
@@ -33,7 +33,7 @@ namespace EnumRun
             }
             set
             {
-                this._Lang = Item.Config.Languages.FirstOrDefault(x =>
+                this._Lang = Item.Setting.Languages.FirstOrDefault(x =>
                     x.Name.Equals(value, StringComparison.OrdinalIgnoreCase));
             }
         }
@@ -235,12 +235,12 @@ namespace EnumRun
         private async Task ProcessThreadAndOutput()
         {
             string outputFile =
-                Function.CreateOutputFileName(Item.Config.OutputPath, Path.GetFileNameWithoutExtension(File));
+                Function.CreateOutputFileName(Item.Setting.OutputPath, Path.GetFileNameWithoutExtension(File));
             Item.Logger.Info("{0} / o:{1} 標準出力リダイレクト先⇒{2}", Name, true, outputFile);
 
-            if (!Directory.Exists(Item.Config.OutputPath))
+            if (!Directory.Exists(Item.Setting.OutputPath))
             {
-                Directory.CreateDirectory(Item.Config.OutputPath);
+                Directory.CreateDirectory(Item.Setting.OutputPath);
             }
             await Task.Run(() =>
             {

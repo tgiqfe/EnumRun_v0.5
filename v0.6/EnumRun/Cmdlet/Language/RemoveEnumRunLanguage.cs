@@ -19,16 +19,16 @@ namespace EnumRun.Cmdlet
 
         protected override void BeginProcessing()
         {
-            Item.Config = EnumRunSetting.Load(Path);
+            Item.Setting = EnumRunSetting.Load(Path);
         }
 
         protected override void ProcessRecord()
         {
             if (Language == null && !string.IsNullOrEmpty(Name))
             {
-                foreach (Language lang in Item.Config.GetLanguage(Name))
+                foreach (Language lang in Item.Setting.GetLanguage(Name))
                 {
-                    Item.Config.Languages.Remove(lang);
+                    Item.Setting.Languages.Remove(lang);
                 }
             }
             else if (Language != null)
@@ -36,10 +36,10 @@ namespace EnumRun.Cmdlet
                 //  名前判定せず、インスタンスの中身が一致したら削除
                 foreach (Language lang in Language)
                 {
-                    Item.Config.Languages.Remove(lang);
+                    Item.Setting.Languages.Remove(lang);
                 }
             }
-            Item.Config.Save(Path);
+            Item.Setting.Save(Path);
         }
     }
 }
